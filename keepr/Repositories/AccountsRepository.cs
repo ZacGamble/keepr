@@ -36,6 +36,12 @@ namespace keepr.Repositories
             return newAccount;
         }
 
+        internal Profile GetProfileById(string id)
+        {
+            string sql = "SELECT * FROM accounts WHERE id = @id";
+            return _db.QueryFirstOrDefault<Profile>(sql, new { id });
+        }
+
         internal Account Edit(Account update)
         {
             string sql = @"

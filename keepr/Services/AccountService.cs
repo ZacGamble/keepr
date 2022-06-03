@@ -1,3 +1,4 @@
+using System;
 using keepr.Models;
 using keepr.Repositories;
 
@@ -27,6 +28,16 @@ namespace keepr.Services
                 return _repo.Create(userInfo);
             }
             return profile;
+        }
+
+        internal Profile GetProfileById(string id)
+        {
+            Profile found = _repo.GetProfileById(id);
+            if (found == null)
+            {
+                throw new Exception("invalid id");
+            }
+            return found;
         }
 
         internal Account Edit(Account editData, string userEmail)
