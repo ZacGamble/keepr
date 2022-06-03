@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using keepr.Models;
 using keepr.Repositories;
 
@@ -43,6 +44,11 @@ namespace keepr.Services
         {
             Get(id);
             _repo.Delete(id);
+        }
+
+        internal List<Keep> GetVaultKeepsById(int id)
+        {
+            return _repo.GetVaultKeepsById(id);
         }
     }
 }
