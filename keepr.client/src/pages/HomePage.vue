@@ -59,9 +59,9 @@ export default {
 
       async goToProfile(profileId) {
         try {
-          await profilesService.getUserProfile(profileId);
-          await keepsService.getUserKeeps(profileId);
-          await vaultsService.getUserVaults(profileId);
+          // await profilesService.getUserProfile(profileId);
+          // await keepsService.getUserKeeps(profileId);
+          // await vaultsService.getUserVaults(profileId);
           router.push({ name: 'Profile', params: { id: profileId } })
         } catch (error) {
           logger.error(error)
