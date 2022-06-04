@@ -15,13 +15,21 @@
       <i class="fw-bold p-1">+</i>
     </h3>
     <div class="row">
-      <div class="col-sm-6 col-md-4 col-lg-2" v-for="v in vaults" :key="v.id">
+      <div
+        class="col-sm-6 col-md-4 col-lg-2 p-2"
+        v-for="v in vaults"
+        :key="v.id"
+      >
         <!-- Vaults -->
-        <div class="p-2 mt-2 bg-dark text-light">
+        <div
+          class="p-2 mt-2 bg-dark text-light rounded selectable"
+          @click="goToVault(v.id)"
+        >
           <div class="d-flex justify-content-between">
-            <h2 class="">
-              {{ v.name }}
-            </h2>
+            <h5 class="">
+              {{ v.name }} <br /><br />
+              {{ v.description }}
+            </h5>
           </div>
         </div>
       </div>
@@ -62,10 +70,12 @@ import Pop from '../utils/Pop'
 import { profilesService } from '../services/ProfilesService'
 import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { Modal } from 'bootstrap'
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     onMounted(async () => {
       try {
         await profilesService.getUserProfile(route.params.id);
@@ -82,6 +92,18 @@ export default {
       vaults: computed(() => AppState.userVaults),
       numberOfKeeps: computed(() => AppState.userKeeps.length),
       numberOfVaults: computed(() => AppState.userVaults.length),
+
+      openKeepModal(k) {
+        AppState.activeKeep = k;
+        logger.log(AppState.activeKeep)
+        Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
+      },
+
+      goToVault(v) {
+        logger.log(v)
+        router.push({ name: 'Vault', params: { id: v } })
+
+      }
     }
   }
 }
