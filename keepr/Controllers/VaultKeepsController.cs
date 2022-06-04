@@ -4,6 +4,7 @@ using keepr.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CodeWorks.Auth0Provider;
+using System;
 
 namespace keepr.Controllers
 {
@@ -25,11 +26,12 @@ namespace keepr.Controllers
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                if (userInfo == null) { throw new Exception("Not authorized user"); }
                 vaultKeepData.CreatorId = userInfo.Id;
-                VaultKeep newVaultKeep = _vks.Create(vaultKeepData);
+                VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo.Id);
                 return Ok(newVaultKeep);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
 
                 return BadRequest(e.Message);
@@ -38,11 +40,12 @@ namespace keepr.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult<VaultKeep> Delete(int id)
+        public async Task<ActionResult<VaultKeep>> Delete(int id)
         {
             try
             {
-                _vks.Delete(id);
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                _vks.Delete(id, userInfo.Id);
                 return Ok("Vaulted Keep Deleted");
             }
             catch (System.Exception e)

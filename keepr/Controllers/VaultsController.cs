@@ -13,11 +13,14 @@ namespace keepr.Controllers
     public class VaultsController : ControllerBase
     {
         private readonly VaultsService _vs;
+        private readonly VaultKeepsService _vks;
 
-        public VaultsController(VaultsService vs)
+        public VaultsController(VaultsService vs, VaultKeepsService vks)
         {
             _vs = vs;
+            _vks = vks;
         }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<Vault>> Create([FromBody] Vault vaultData)
@@ -38,7 +41,7 @@ namespace keepr.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+
         public ActionResult<Vault> Get(int id)
         {
             try
@@ -54,12 +57,15 @@ namespace keepr.Controllers
         }
 
         [HttpGet("{id}/keeps")]
-        [Authorize]
-        public ActionResult<List<Keep>> GetVaultKeepsById(int id)
+
+        public async Task<ActionResult<List<VaultKeepViewModel>>> GetVaultKeepsById(int id)
         {
             try
             {
-                List<Keep> vaultKeeps = _vs.GetVaultKeepsById(id);
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+
+                List<VaultKeepViewModel> vaultKeeps = _vs.GetVaultKeepsById(id, userInfo.Id);
+
                 return Ok(vaultKeeps);
             }
             catch (System.Exception e)

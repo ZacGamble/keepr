@@ -12,11 +12,13 @@ namespace keepr.Controllers
     {
         private readonly AccountService _acctServ;
         private readonly KeepsService _ks;
+        private readonly VaultsService _vs;
 
-        public ProfilesController(AccountService acctServ, KeepsService ks)
+        public ProfilesController(AccountService acctServ, KeepsService ks, VaultsService vs)
         {
             _acctServ = acctServ;
             _ks = ks;
+            _vs = vs;
         }
 
         [HttpGet("{id}")]
@@ -42,6 +44,21 @@ namespace keepr.Controllers
                 _acctServ.GetProfileById(profileId);
                 List<Keep> keeps = _ks.GetByCreatorId(profileId);
                 return Ok(keeps);
+            }
+            catch (System.Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpGet("{profileId}/vaults")]
+        public ActionResult<List<Vault>> GetVaultsByProfileId(string profileId)
+        {
+            try
+            {
+                _acctServ.GetProfileById(profileId);
+                List<Vault> vaults = _vs.GetVaultsByCreatorId(profileId);
+                return Ok(vaults);
             }
             catch (System.Exception e)
             {

@@ -26,6 +26,11 @@ namespace keepr.Services
             {
                 throw new Exception("Invalid ID");
             }
+            if (found.IsPrivate)
+            {
+                throw new Exception("You do not have access");
+            }
+
             return found;
         }
 
@@ -46,9 +51,25 @@ namespace keepr.Services
             _repo.Delete(id);
         }
 
-        internal List<Keep> GetVaultKeepsById(int id)
+        internal List<VaultKeepViewModel> GetVaultKeepsById(int id, string userId)
+
         {
-            return _repo.GetVaultKeepsById(id);
+            Vault found = Get(id);
+            if (found.IsPrivate && found.CreatorId != userId)
+            {
+                throw new Exception("You do not have access");
+            }
+            return _repo.GetVaultKeepViewModelFromVault(id);
+        }
+
+        internal List<Vault> GetMyVaults(string id)
+        {
+            return _repo.GetMyVaults(id);
+        }
+
+        internal List<Vault> GetVaultsByCreatorId(string profileId)
+        {
+            return _repo.GetVaultsByCreatorId(profileId);
         }
     }
 }

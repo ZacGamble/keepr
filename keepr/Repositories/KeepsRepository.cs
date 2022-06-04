@@ -52,7 +52,7 @@ namespace keepr.Repositories
             FROM keeps k
             JOIN accounts a ON k.creatorId = a.id
             ";
-            return _db.Query<Account, Keep, Keep>(sql, (a, k) =>
+            return _db.Query<Profile, Keep, Keep>(sql, (a, k) =>
             {
                 k.Creator = a;
                 return k;
@@ -62,10 +62,16 @@ namespace keepr.Repositories
         {
             string sql = @"
             SELECT
-                k.*
+            k.*,
+            a.*
             FROM keeps k
-            WHERE k.id = @id;";
-            return _db.QueryFirstOrDefault<Keep>(sql, new { id });
+            JOIN accounts a ON k.creatorId = a.id
+            WHERE k.id = @id";
+            return _db.Query<Keep, Profile, Keep>(sql, (k, p) =>
+            {
+                k.Creator = p;
+                return k;
+            }, new { id }).FirstOrDefault();
         }
 
         internal void Edit(Keep original)
