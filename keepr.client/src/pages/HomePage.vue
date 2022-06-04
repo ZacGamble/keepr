@@ -14,6 +14,7 @@
             {{ k.name }}
           </h2>
           <img
+            @click="goToProfile(k.creator.id)"
             :src="k.creator.picture"
             alt="profile image"
             class="thumbnail-img selectable"
@@ -31,10 +32,14 @@ import { computed, onMounted } from '@vue/runtime-core'
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { keepsService } from '../services/KeepsService.js'
+import { profilesService } from '../services/ProfilesService.js'
+import { vaultsService } from '../services/VaultsService.js'
 import { AppState } from '../AppState';
 import { Modal } from 'bootstrap';
+import { useRouter } from 'vue-router';
 export default {
   setup() {
+    const router = useRouter();
     onMounted(async () => {
       try {
         await keepsService.getAll();
@@ -50,6 +55,18 @@ export default {
         AppState.activeKeep = k;
         logger.log(AppState.activeKeep)
         Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
+      },
+
+      async goToProfile(profileId) {
+        try {
+          await profilesService.getUserProfile(profileId);
+          await keepsService.getUserKeeps(profileId);
+          await vaultsService.getUserVaults(profileId);
+          router.push({ name: 'Profile', params: { id: profileId } })
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
       }
     }
   }

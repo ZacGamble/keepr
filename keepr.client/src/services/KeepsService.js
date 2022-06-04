@@ -8,6 +8,11 @@ class KeepsService {
         AppState.keeps = res.data;
         logger.log("Get All / set active Keeps > ", AppState.keeps)
     }
+    async getUserKeeps(profileId){
+        const res = await api.get("api/profiles/"+ profileId + "/keeps")
+        AppState.userKeeps = res.data;
+        logger.log("Get user Keeps > ", AppState.userKeeps)
+    }
 }
 
 export const keepsService = new KeepsService();
