@@ -26,6 +26,7 @@ namespace keepr.Services
                 return newVaultKeep;
             }
         }
+
         internal VaultKeep Get(int id)
         {
             return _repo.Get(id);
@@ -39,6 +40,11 @@ namespace keepr.Services
                 throw new System.Exception("You do not have the right to delete this.");
             }
             _repo.Delete(id);
+        }
+
+        internal VaultKeep GetByVaultId(int id)
+        {
+            return _repo.GetByVaultId(id);
         }
     }
 }

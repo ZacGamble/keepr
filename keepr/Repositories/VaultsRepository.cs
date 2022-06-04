@@ -57,6 +57,7 @@ namespace keepr.Repositories
 
         internal List<VaultKeepViewModel> GetVaultKeepViewModelFromVault(int id)
         {
+            //FIXME I need to get keeps via VaultId utilizing the VaultKeep Object relationship.
             string sql = @"
             SELECT 
                 k.*,

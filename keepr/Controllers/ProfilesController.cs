@@ -56,6 +56,7 @@ namespace keepr.Controllers
         {
             try
             {
+
                 _acctServ.GetProfileById(profileId);
                 List<Vault> vaults = _vs.GetVaultsByCreatorId(profileId);
                 return Ok(vaults);

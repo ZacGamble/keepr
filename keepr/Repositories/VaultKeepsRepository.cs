@@ -41,5 +41,15 @@ namespace keepr.Repositories
             WHERE vk.id = @id;";
             return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
         }
+
+        internal VaultKeep GetByVaultId(int id)
+        {
+            string sql = @"
+            SELECT
+            vk.*
+            FROM vaultkeeps vk
+            WHERE vk.vaultId = @id;";
+            return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
+        }
     }
 }
