@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <h3>
+    <h3 class="selectable rounded" @click="createVault()">
       Vaults:
       <i class="fw-bold p-1">+</i>
     </h3>
@@ -36,7 +36,9 @@
     </div>
 
     <div class="wrapper">
-      <h3>Keeps: <i class="fw-bold fs-3 p-1">+</i></h3>
+      <h3 class="selectable rounded" @click="createKeep()">
+        Keeps: <i class="fw-bold fs-3 p-1">+</i>
+      </h3>
       <div class="masonry-container">
         <div class="keep-container" v-for="k in keeps" :key="k.id">
           <!-- Keep Masonry -->
@@ -58,6 +60,8 @@
       </div>
     </div>
   </div>
+  <NewKeepModal />
+  <NewVaultModal />
 </template>
 
 
@@ -102,7 +106,14 @@ export default {
       goToVault(v) {
         logger.log(v)
         router.push({ name: 'Vault', params: { id: v } })
+      },
 
+      createVault() {
+        Modal.getOrCreateInstance(document.getElementById("new-vault-modal")).show()
+      },
+
+      createKeep() {
+        Modal.getOrCreateInstance(document.getElementById('new-keep-modal')).show()
       }
     }
   }
