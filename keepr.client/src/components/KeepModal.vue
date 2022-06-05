@@ -29,20 +29,14 @@
                 <p class="mb-4">{{ activeKeep?.description }}</p>
               </div>
             </div>
-
-            <!-- This is not mobile responsive TODO -->
             <div class="row">
-              <div class="col-lg-4">
+              <div class="d-flex responsive-div">
                 <form title="Add to a vault">
                   <select name="add-to-vault-select" id="">
                     <option>Add to Vault</option>
                   </select>
                 </form>
-              </div>
-              <div class="col-lg-4">
-                <i class="mdi mdi-delete fs-1 mx-4"></i>
-              </div>
-              <div class="col-lg-4">
+                <i class="mdi mdi-delete fs-1 ms-4"></i>
                 <div>
                   <img
                     :src="activeKeep?.creator.picture"
@@ -79,6 +73,32 @@ export default {
   position: absolute;
   bottom: 1em;
   right: 1em;
+}
+
+.responsive-div {
+  background-color: var(primary);
+  align-items: center;
+  transform: translateY(2em);
+}
+
+@media only screen and (max-width: 1200px) {
+  .responsive-div {
+    transform: translateX(0em);
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .responsive-div {
+    transform: translateX(-12em);
+    align-items: center;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .responsive-div {
+    transform: translateX(0em);
+    align-items: center;
+  }
 }
 
 .thumbnail-img {
