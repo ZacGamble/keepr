@@ -26,10 +26,7 @@ namespace keepr.Services
             {
                 throw new Exception("Invalid ID");
             }
-            if (found.IsPrivate)
-            {
-                throw new Exception("You do not have access");
-            }
+
 
             return found;
         }
@@ -39,6 +36,7 @@ namespace keepr.Services
             Vault original = Get(vaultData.Id);
             original.Name = vaultData.Name ?? original.Name;
             original.Description = vaultData.Description ?? original.Description;
+            original.Img = vaultData.Img ?? original.Img;
             original.IsPrivate = vaultData.IsPrivate != original.IsPrivate ? vaultData.IsPrivate : original.IsPrivate;
 
             _repo.Edit(original);
@@ -59,7 +57,8 @@ namespace keepr.Services
             {
                 throw new Exception("You do not have access");
             }
-            return _repo.GetVaultKeepViewModelFromVault(id);
+            List<VaultKeepViewModel> vaultKeeps = _repo.GetVaultKeepViewModelFromVault(id);
+            return vaultKeeps;
         }
 
         internal List<Vault> GetMyVaults(string id)

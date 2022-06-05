@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS accounts(
 
 CREATE TABLE IF NOT EXISTS keeps(
     id INT NOT NULL AUTO_INCREMENT primary key,
-    creatorId VARCHAR(255) DEFAULT "0",
+    creatorId VARCHAR(255) NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     img TEXT NOT NULL,
@@ -20,16 +20,17 @@ CREATE TABLE IF NOT EXISTS keeps(
 
 CREATE TABLE IF NOT EXISTS vaults(
     id INT NOT NULL AUTO_INCREMENT primary key,
-    creatorId VARCHAR(255) DEFAULT "0",
+    creatorId VARCHAR(255) NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
+    img TEXT NOT NULL,
     isPrivate TINYINT DEFAULT 0,
     FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8;
 
 CREATE TABLE IF NOT EXISTS vaultkeeps(
     id INT NOT NULL AUTO_INCREMENT primary key,
-    creatorId VARCHAR(255) DEFAULT "0",
+    creatorId VARCHAR(255) NOT NULL,
     vaultId INT NOT NULL,
     keepId INT NOT NULL,
     FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE,

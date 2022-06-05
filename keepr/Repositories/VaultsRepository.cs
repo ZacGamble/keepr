@@ -19,9 +19,9 @@ namespace keepr.Repositories
         {
             string sql = @"
             INSERT INTO vaults
-            (name, description, isPrivate, creatorId)
+            (name, description, img, isPrivate, creatorId)
             VALUES
-            (@Name, @Description, @isPrivate, @CreatorId);
+            (@Name, @Description, @Img, @isPrivate, @CreatorId);
             SELECT LAST_INSERT_ID();";
             vaultData.Id = _db.ExecuteScalar<int>(sql, vaultData);
             return vaultData;
@@ -50,6 +50,7 @@ namespace keepr.Repositories
             SET
             name = @Name,
             description = @Description,
+            img = @Img,
             isPrivate = @IsPrivate
             WHERE id = @Id;";
             _db.Execute(sql, original);
@@ -91,14 +92,20 @@ namespace keepr.Repositories
             return _db.Query<Vault>(sql, new { id }).ToList();
         }
 
-        internal List<Vault> GetVaultsByCreatorId(string profileId)
+        internal List<Vault> GetVaultsByCreatorId(string id)
         {
             string sql = @"
             SELECT
-            v.*
+            v.*,
+            a.*
             FROM vaults v
-            WHERE v.creatorId = @profileId;";
-            return _db.Query<Vault>(sql, new { profileId }).ToList();
+            JOIN accounts a ON v.creatorId = a.id
+            WHERE v.creatorId = @id;";
+            return _db.Query<Vault, Profile, Vault>(sql, (v, p) =>
+            {
+                v.Creator = p;
+                return v;
+            }, new { id }).ToList();
         }
 
         internal List<VaultKeepViewModel> GetVaultKeepsById(int id)
