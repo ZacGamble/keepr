@@ -28,8 +28,8 @@ namespace keepr.Controllers
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-                vaultData.CreatorId = userInfo.Id;
-                Vault vault = _vs.Create(vaultData);
+                Vault vault = _vs.Create(vaultData, userInfo.Id);
+                // vaultData.CreatorId = userInfo.Id;
                 vault.Creator = userInfo;
                 return Ok(vault);
             }

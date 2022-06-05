@@ -12,7 +12,11 @@
     </div>
     <h3 class="" @click="createVault()">
       Vaults:
-      <i class="fw-bold fs-1 text-primary plus p-1">+</i>
+      <i
+        v-if="route.params.id == account.id"
+        class="fw-bold fs-1 text-primary plus p-1"
+        >+</i
+      >
     </h3>
     <div class="row">
       <div
@@ -39,7 +43,12 @@
 
     <div class="wrapper">
       <h3 class="" @click="createKeep()">
-        Keeps: <i class="fw-bold fs-1 text-primary p-1 plus">+</i>
+        Keeps:
+        <i
+          v-if="route.params.id == account.id"
+          class="fw-bold fs-1 text-primary p-1 plus"
+          >+</i
+        >
       </h3>
       <div class="masonry-container">
         <div class="keep-container" v-for="k in keeps" :key="k.id">
@@ -93,6 +102,8 @@ export default {
       }
     })
     return {
+      route,
+      account: computed(() => AppState.account),
       profile: computed(() => AppState.activeProfile),
       keeps: computed(() => AppState.userKeeps),
       vaults: computed(() => AppState.userVaults),

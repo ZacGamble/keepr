@@ -17,6 +17,12 @@
               class="mt-4 p-2 rounded"
               v-model="formData.description"
             />
+            <input
+              type="text"
+              placeholder="Image URL..."
+              class="mt-4 p-2 rounded"
+              v-model="formData.img"
+            />
             <div class="d-flex align-items-center">
               <input
                 type="checkbox"
@@ -49,6 +55,7 @@ export default {
     const formData = ref({})
     return {
       formData,
+
 
       async createNewVault() {
         try {

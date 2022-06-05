@@ -5,6 +5,7 @@ import { api } from "./AxiosService";
 class VaultsService {
 
     async create(formData){
+        formData.creatorId = AppState.account.id
         const res = await api.post("api/vaults", formData)
         AppState.userVaults.unshift(res.data);
         logger.log('created vault > vaultsService.js >', res.data)

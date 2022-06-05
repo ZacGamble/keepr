@@ -14,8 +14,12 @@ namespace keepr.Services
             _repo = repo;
         }
 
-        internal Vault Create(Vault vaultData)
+        internal Vault Create(Vault vaultData, string userId)
         {
+            if (vaultData.CreatorId != userId)
+            {
+                throw new Exception("You must be logged in to create vaults.");
+            }
             return _repo.Create(vaultData);
         }
 
