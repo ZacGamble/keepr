@@ -57,15 +57,13 @@ namespace keepr.Controllers
         }
 
         [HttpGet("{id}/keeps")]
-        [Authorize]
 
-        public async Task<ActionResult<List<VaultKeepViewModel>>> GetVaultKeepsById(int id)
+        public ActionResult<List<VaultKeepViewModel>> GetVaultKeepsById(int id, string accountId)
         {
             try
             {
-                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
 
-                List<VaultKeepViewModel> vaultKeeps = _vs.GetVaultKeepsById(id, userInfo.Id);
+                List<VaultKeepViewModel> vaultKeeps = _vs.GetVaultKeepsById(id, accountId);
 
                 return Ok(vaultKeeps);
             }
@@ -77,12 +75,13 @@ namespace keepr.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult<Vault> Edit([FromBody] Vault vaultData, int id)
+        public async Task<ActionResult<Vault>> Edit([FromBody] Vault vaultData, int id)
         {
             try
             {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 vaultData.Id = id;
-                Vault vault = _vs.Edit(vaultData);
+                Vault vault = _vs.Edit(vaultData, userInfo.Id);
                 return Ok(vault);
             }
             catch (System.Exception e)
@@ -93,11 +92,12 @@ namespace keepr.Controllers
         }
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult<Vault> Delete(int id)
+        public async Task<ActionResult<Vault>> Delete(int id)
         {
             try
             {
-                _vs.Delete(id);
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                _vs.Delete(id, userInfo.Id);
                 return Ok("Vault deleted");
             }
             catch (System.Exception e)

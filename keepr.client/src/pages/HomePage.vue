@@ -1,7 +1,7 @@
 <template>
   <div class="masonry-container">
     <div class="keep-container" v-for="k in keeps" :key="k.id">
-      <div class="p-2">
+      <div class="p-2" style="min-height: 20vh">
         <img
           @click="openKeepModal(k)"
           :src="k.img"

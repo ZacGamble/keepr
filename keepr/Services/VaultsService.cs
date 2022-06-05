@@ -31,9 +31,13 @@ namespace keepr.Services
             return found;
         }
 
-        internal Vault Edit(Vault vaultData)
+        internal Vault Edit(Vault vaultData, string userId)
         {
             Vault original = Get(vaultData.Id);
+            if (original.CreatorId != userId)
+            {
+                throw new Exception("O' you don't have the right!");
+            }
             original.Name = vaultData.Name ?? original.Name;
             original.Description = vaultData.Description ?? original.Description;
             original.Img = vaultData.Img ?? original.Img;
@@ -43,9 +47,13 @@ namespace keepr.Services
             return original;
         }
 
-        internal void Delete(int id)
+        internal void Delete(int id, string userId)
         {
-            Get(id);
+            Vault original = Get(id);
+            if (original.CreatorId != userId)
+            {
+                throw new Exception("O' you don't have the right!");
+            }
             _repo.Delete(id);
         }
 

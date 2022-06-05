@@ -24,6 +24,8 @@
         <div
           class="p-2 mt-2 bg-dark text-light rounded selectable"
           @click="goToVault(v.id)"
+          style="background-size: cover"
+          :style="`background-image: url(${v.img})`"
         >
           <div class="d-flex justify-content-between">
             <h5 class="">

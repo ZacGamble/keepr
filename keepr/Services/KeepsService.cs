@@ -39,9 +39,13 @@ namespace keepr.Services
             return found;
         }
 
-        internal Keep Edit(Keep keepData)
+        internal Keep Edit(Keep keepData, string userId)
         {
             Keep original = Get(keepData.Id);
+            if (original.CreatorId != userId)
+            {
+                throw new Exception("You do not own this keep");
+            }
             original.Name = keepData.Name ?? original.Name;
             original.Description = keepData.Description ?? original.Description;
             original.Img = keepData.Img ?? original.Img;
@@ -51,9 +55,13 @@ namespace keepr.Services
             return original;
         }
 
-        internal void Delete(int id)
+        internal void Delete(int id, string userId)
         {
-            Get(id);
+            Keep original = Get(id);
+            if (original.CreatorId != userId)
+            {
+                throw new Exception("You do not own this keep");
+            }
             _repo.Delete(id);
         }
     }

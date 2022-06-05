@@ -69,12 +69,13 @@ namespace keepr.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult<Keep> Edit([FromBody] Keep keepData, int id)
+        public async Task<ActionResult<Keep>> Edit([FromBody] Keep keepData, int id)
         {
             try
             {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 keepData.Id = id;
-                Keep keep = _ks.Edit(keepData);
+                Keep keep = _ks.Edit(keepData, userInfo.Id);
                 return Ok(keep);
             }
             catch (System.Exception e)
@@ -86,11 +87,12 @@ namespace keepr.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult<Keep> Delete(int id)
+        public async Task<ActionResult<Keep>> Delete(int id)
         {
             try
             {
-                _ks.Delete(id);
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                _ks.Delete(id, userInfo.Id);
                 return Ok("Keep deleted");
             }
             catch (System.Exception e)

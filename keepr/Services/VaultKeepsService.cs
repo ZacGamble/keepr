@@ -14,17 +14,14 @@ namespace keepr.Services
 
         internal VaultKeep Create(VaultKeep vaultKeepData, string userId)
         {
-            VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
-
-            if (newVaultKeep.CreatorId != userId)
+            if (vaultKeepData.CreatorId != userId)
             {
                 throw new System.Exception("You do not have the right to post this.");
             }
-            else
-            {
+            VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
 
-                return newVaultKeep;
-            }
+            return newVaultKeep;
+
         }
 
         internal VaultKeep Get(int id)
