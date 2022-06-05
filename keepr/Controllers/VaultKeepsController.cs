@@ -21,15 +21,15 @@ namespace keepr.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult<VaultKeep> Create([FromBody] VaultKeep vaultKeepData, string userId)
+        public async Task<ActionResult<VaultKeep>> Create([FromBody] VaultKeep vaultKeepData, string userId)
         {
             try
             {
 
-                if (userId == null) { throw new Exception("Not authorized user"); }
-
-                VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userId);
-                newVaultKeep.CreatorId = userId;
+                // if (userId == null) { throw new Exception("Not authorized user"); }
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                vaultKeepData.CreatorId = userInfo.Id;
+                VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo.Id);
                 return Ok(newVaultKeep);
             }
             catch (Exception e)

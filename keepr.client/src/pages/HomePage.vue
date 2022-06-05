@@ -53,7 +53,7 @@ export default {
 
       openKeepModal(k) {
         AppState.activeKeep = k;
-        logger.log(AppState.activeKeep)
+        logger.log("The active keep >", AppState.activeKeep)
         Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
       },
 

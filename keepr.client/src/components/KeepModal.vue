@@ -31,10 +31,15 @@
             </div>
             <div class="row">
               <div class="d-flex responsive-div">
-                <form title="Add to a vault">
-                  <select name="add-to-vault-select" id="">
-                    <option>Add to Vault</option>
+                <form title="Add to a vault" @submit.prevent="addKeepToVault()">
+                  <select name="add-to-vault-select" v-model="vaultSelect">
+                    <option v-for="mv in myVaults" :key="mv" :value="mv.id">
+                      {{ mv?.name.substring(0, 15) }}
+                    </option>
                   </select>
+                  <button class="btn btn-secondary mt-2 ms-2">
+                    Add To Vault
+                  </button>
                 </form>
                 <i class="mdi mdi-delete fs-1 ms-4"></i>
                 <div>
@@ -56,17 +61,35 @@
 
 
 <script>
-import { computed } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import { AppState } from '../AppState'
+import { accountService } from '../services/AccountService'
+import { logger } from '../utils/Logger'
+import Pop from '../utils/Pop'
+import { onMounted } from '@vue/runtime-core'
+import { AuthService } from '../services/AuthService'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   setup() {
+    const vaultSelect = ref({})
     return {
-      activeKeep: computed(() => AppState.activeKeep)
+      vaultSelect,
+      myVaults: computed(() => AppState.myVaults),
+      activeKeep: computed(() => AppState.activeKeep),
+
+      async addKeepToVault() {
+        try {
+          logger.log(vaultSelect.value)
+          await vaultKeepsService.addKeepToVault(vaultSelect.value)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
     }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .position {
