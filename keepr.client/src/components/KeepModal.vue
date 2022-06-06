@@ -12,7 +12,7 @@
           </div>
           <div class="col-md-6">
             <div class="row">
-              <div class="d-flex justify-content-evenly">
+              <div class="d-flex justify-content-evenly align-items-center">
                 <div class="d-flex">
                   <i class="mdi mdi-eye mx-4 fs-2" />
                   <span class="fs-2">{{ activeKeep?.views }}</span>
@@ -21,6 +21,12 @@
                   <i class="mdi mdi-safe mx-4 fs-2" />
                   <span class="fs-2">{{ activeKeep?.kept }}</span>
                 </div>
+                <button
+                  type="button"
+                  class="btn-close position"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
             </div>
             <div class="row mt-4 mb-5">
@@ -56,6 +62,8 @@
                   :src="activeKeep?.creator.picture"
                   alt=""
                   class="img-fluid thumbnail-img"
+                  :title="`Go to the profile of ${activeKeep?.creator.name}`"
+                  @click="goToProfile()"
                 />
                 {{ activeKeep?.creator.name }}
               </div>
@@ -80,11 +88,14 @@ import { vaultKeepsService } from '../services/VaultKeepsService'
 import { keepsService } from '../services/KeepsService'
 import { Modal } from 'bootstrap'
 import { vaultsService } from '../services/VaultsService'
+import { useRouter } from 'vue-router'
 export default {
   setup() {
     const vaultSelect = ref({})
+    const router = useRouter();
     return {
       vaultSelect,
+      router,
       myVaults: computed(() => AppState.myVaults),
       activeKeep: computed(() => AppState.activeKeep),
       account: computed(() => AppState.account),
@@ -109,6 +120,16 @@ export default {
           logger.error(error)
           Pop.toast(error.message, 'error')
         }
+      },
+
+      async goToProfile() {
+        try {
+          const profileId = AppState.activeKeep.creatorId
+          router.push({ name: 'Profile', params: { id: profileId } })
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
       }
     }
   }
@@ -117,9 +138,14 @@ export default {
 
 <style lang="scss" scoped>
 .position {
-  position: absolute;
-  bottom: 1em;
-  right: 1em;
+  position: relative;
+}
+@media only screen and (max-width: 991.8px) {
+  .position {
+    position: relative;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
 
 .responsive-div {
@@ -137,9 +163,13 @@ export default {
 
 @media only screen and (max-width: 992px) {
   .responsive-div {
-    transform: translateX(-12em);
+    transform: translateX(-0em);
+    transform: translateY(-1em);
     align-items: center;
-    margin-top: 2em;
+    justify-content: center;
+    padding: 0px 1em 0px 1em;
+    flex-direction: column;
+    margin-left: 1em;
   }
 }
 @media only screen and (max-width: 768px) {

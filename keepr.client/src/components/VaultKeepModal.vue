@@ -12,7 +12,7 @@
           </div>
           <div class="col-md-6">
             <div class="row">
-              <div class="d-flex justify-content-evenly">
+              <div class="d-flex justify-content-evenly align-items-center">
                 <div class="d-flex">
                   <i class="mdi mdi-eye mx-4 fs-2" />
                   <span class="fs-2">{{ activeKeep?.views }}</span>
@@ -21,6 +21,12 @@
                   <i class="mdi mdi-safe mx-4 fs-2" />
                   <span class="fs-2">{{ activeKeep?.kept }}</span>
                 </div>
+                <button
+                  type="button"
+                  class="btn-close position"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
             </div>
             <div class="row mt-4 mb-5">
@@ -82,9 +88,14 @@ export default {
 
 <style lang="scss" scoped>
 .position {
-  position: absolute;
-  bottom: 1em;
-  right: 1em;
+  position: relative;
+}
+@media only screen and (max-width: 991.8px) {
+  .position {
+    position: relative;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
 
 .responsive-div {
