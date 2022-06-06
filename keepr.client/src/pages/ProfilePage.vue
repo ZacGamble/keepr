@@ -26,7 +26,7 @@
       >
         <!-- Vaults -->
         <div
-          class="p-2 mt-2 vault-text rounded selectable"
+          class="p-2 mt-2 vault rounded selectable"
           @click="goToVault(v)"
           style="background-size: cover"
           :style="`background-image: url(${v.img})`"
@@ -107,7 +107,7 @@ export default {
       profile: computed(() => AppState.activeProfile),
       keeps: computed(() => AppState.keeps),
       vaults: computed(() => AppState.userVaults),
-      numberOfKeeps: computed(() => AppState.userKeeps.length),
+      numberOfKeeps: computed(() => AppState.keeps.length),
       numberOfVaults: computed(() => AppState.userVaults.length),
 
       async openKeepModal(k) {
@@ -124,6 +124,7 @@ export default {
           Pop.toast("Sorry, you weren't invited..")
           return
         }
+        AppState.activeVault = v
         router.push({ name: 'Vault', params: { id: v.id } })
       },
 
@@ -162,6 +163,20 @@ export default {
 }
 .keep-container {
   padding: 1px;
+  animation-name: fadeInto;
+  animation-duration: 5000ms;
+}
+@keyframes fadeInto {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
 }
 .keep-name {
   transform: translateY(-3em);
@@ -171,8 +186,22 @@ export default {
 }
 // #endregion
 
-.vault-text {
+.vault {
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;
+  animation-name: fadeInto;
+  animation-duration: 5000ms;
+}
+@keyframes fadeInto {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
 }
 </style>

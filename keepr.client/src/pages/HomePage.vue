@@ -86,6 +86,20 @@ export default {
 }
 .keep-container {
   padding: 1px;
+  animation-name: fadeInto;
+  animation-duration: 5000ms;
+}
+@keyframes fadeInto {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
 }
 .keep-name {
   transform: translateY(-3em);

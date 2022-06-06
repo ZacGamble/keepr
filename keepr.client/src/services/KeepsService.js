@@ -12,13 +12,13 @@ class KeepsService {
         const res = await api.get("api/keeps")
         AppState.keeps = res.data;
         AppState.keeps.reverse()
-        logger.log("Get All / set active Keeps > ", AppState.keeps)
+        // logger.log("Get All / set active Keeps > ", AppState.keeps)
     }
     async getUserKeeps(profileId){
         const res = await api.get("api/profiles/"+ profileId + "/keeps")
         AppState.keeps = res.data;
         AppState.keeps.reverse()
-        logger.log("Get user Keeps > ", AppState.keeps)
+        // logger.log("Get user Keeps > ", AppState.keeps)
     }
 
     async incrementViews(){

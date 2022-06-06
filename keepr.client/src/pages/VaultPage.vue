@@ -56,7 +56,7 @@ export default {
     const router = useRouter();
     onMounted(async () => {
       try {
-        await checkAccess()
+        // await this.checkAccess() TODO Need to push home manual URL load-in aliens
         await vaultKeepsService.getKeepsByVaultId(route.params.id)
       } catch (error) {
         logger.error(error)
@@ -111,6 +111,20 @@ export default {
 // }
 .keep-container {
   padding: 10px;
+  animation-name: fadeInto;
+  animation-duration: 5000ms;
+}
+@keyframes fadeInto {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
 }
 .keep-name {
   transform: translateY(-3em);

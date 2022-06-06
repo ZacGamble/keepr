@@ -32,8 +32,12 @@
 
             <div class="d-flex responsive-div">
               <form title="Add to a vault" @submit.prevent="addKeepToVault()">
-                <select name="add-to-vault-select" v-model="vaultSelect">
-                  <option v-for="mv in myVaults" :key="mv" :value="mv.id">
+                <select
+                  name="add-to-vault-select"
+                  v-model="vaultSelect"
+                  required
+                >
+                  <option v-for="mv in myVaults" :key="mv" :value="mv">
                     {{ mv?.name.substring(0, 15) }}
                   </option>
                 </select>
@@ -75,6 +79,7 @@ import { AuthService } from '../services/AuthService'
 import { vaultKeepsService } from '../services/VaultKeepsService'
 import { keepsService } from '../services/KeepsService'
 import { Modal } from 'bootstrap'
+import { vaultsService } from '../services/VaultsService'
 export default {
   setup() {
     const vaultSelect = ref({})
@@ -86,8 +91,10 @@ export default {
 
       async addKeepToVault() {
         try {
-          logger.log(vaultSelect.value)
+          logger.log("The select values", vaultSelect.value)
           await vaultKeepsService.addKeepToVault(vaultSelect.value)
+          // await vaultsService.incrementVaultKeeps(vaultSelect.value)
+          Pop.toast("Keep added to your vault!", 'success')
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
