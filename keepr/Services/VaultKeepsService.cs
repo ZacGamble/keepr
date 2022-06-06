@@ -18,8 +18,12 @@ namespace keepr.Services
             {
                 throw new System.Exception("You must be logged in to post.");
             }
-            VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
             // FIXME figure out how to verify ownership here
+            VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
+            if (userId != newVaultKeep.CreatorId)
+            {
+                throw new System.Exception("You must be logged in to post");
+            }
             return newVaultKeep;
 
         }

@@ -49,7 +49,7 @@ namespace keepr.Services
                 _repo.Edit(original);
                 return original;
             }
-            if (original.CreatorId == userId)
+            else if (original.CreatorId == userId)
             {
                 original.Name = keepData.Name ?? original.Name;
                 original.Description = keepData.Description ?? original.Description;

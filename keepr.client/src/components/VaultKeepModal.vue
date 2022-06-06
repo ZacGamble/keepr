@@ -37,14 +37,16 @@
             </div>
             <div class="row">
               <div class="d-flex responsive-div">
-                <button class="btn btn-danger" @click="removeFromVault()">
+                <button class="btn btn-danger my-2" @click="removeFromVault()">
                   Remove From Vault
                 </button>
-                <div class="d-flex justify-content-center align-items-center">
+                <div
+                  class="d-flex justify-content-center align-items-center my-2"
+                >
                   <img
                     :src="activeKeep?.creator.picture"
                     alt=""
-                    class="img-fluid thumbnail-img"
+                    class="img-fluid thumbnail-img me-2"
                   />
                   {{ activeKeep?.creator.name }}
                 </div>
@@ -113,8 +115,13 @@ export default {
 
 @media only screen and (max-width: 992px) {
   .responsive-div {
-    transform: translateX(-12em);
+    transform: translateX(-0em);
+    transform: translateY(-1em);
     align-items: center;
+    justify-content: center;
+    padding: 0px 1em 0px 1em;
+    flex-direction: column;
+    margin-left: 1em;
   }
 }
 @media only screen and (max-width: 768px) {

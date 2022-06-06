@@ -62,6 +62,7 @@ export default {
         await vaultsService.getById(route.params.id)
         await vaultKeepsService.getKeepsByVaultId(route.params.id)
       } catch (error) {
+
         router.push({ name: 'Home' });
         logger.error(error)
         Pop.toast("You were not invited.", 'error')
