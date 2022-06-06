@@ -9,7 +9,10 @@
           class="img-fluid img-custom"
           :title="'Open ' + k.name + ' details'"
         />
-        <div class="d-flex justify-content-between" style="height: 0px">
+        <div
+          class="d-flex justify-content-between mobile-cleanup"
+          style="height: 0px"
+        >
           <h2 class="keep-name">
             {{ k.name }}
           </h2>
@@ -82,7 +85,7 @@ export default {
   cursor: pointer;
 }
 .img-custom:hover {
-  transform: scale(1.02);
+  transform: scale(1.005);
 }
 .keep-container {
   padding: 1px;
@@ -107,6 +110,15 @@ export default {
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;
 }
+
+// .mobile-cleanup {
+//   padding: 1px;
+// }
+// @media only screen and (max-width: 530px) {
+//   .mobile-cleanup {
+//     margin-right: 0.5em;
+//   }
+// }
 .thumbnail-img {
   border-radius: 50%;
   height: 4em;

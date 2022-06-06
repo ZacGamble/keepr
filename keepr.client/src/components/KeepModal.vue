@@ -100,9 +100,11 @@ export default {
       },
       async deleteKeep() {
         try {
-          await keepsService.deleteKeep()
-          Pop.toast("Keep disposed of. Successfully.")
-          Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide()
+          if (await Pop.confirm()) {
+            await keepsService.deleteKeep()
+            Pop.toast("Keep destroyed.")
+            Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide()
+          }
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
