@@ -84,14 +84,15 @@ namespace keepr.Services
             return _repo.GetMyVaults(id);
         }
 
-        internal List<Vault> GetVaultsByCreatorId(string profileId)
+        internal List<Vault> GetVaultsByCreatorId(string profileId, string userInfo)
         {
 
             List<Vault> foundVaults = _repo.GetVaultsByCreatorId(profileId);
             Account foundAccount = _acctServ.GetAccountById(profileId);
-            if (foundAccount.Id != profileId)
+            if (foundAccount.Id != userInfo)
             {
                 foundVaults = foundVaults.FindAll(v => v.IsPrivate == false);
+                return foundVaults;
             }
 
             return foundVaults;

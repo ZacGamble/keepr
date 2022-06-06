@@ -69,7 +69,7 @@ namespace keepr.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<Keep>> Edit([FromBody] Keep keepData, int id)
+        public async Task<ActionResult<Keep>> Edit(int id, [FromBody] Keep keepData)
         {
             try
             {

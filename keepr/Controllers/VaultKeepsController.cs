@@ -25,11 +25,9 @@ namespace keepr.Controllers
         {
             try
             {
-
-                // if (userId == null) { throw new Exception("Not authorized user"); }
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
                 vaultKeepData.CreatorId = userInfo.Id;
-                VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo.Id);
+                VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo?.Id);
                 return Ok(newVaultKeep);
             }
             catch (Exception e)

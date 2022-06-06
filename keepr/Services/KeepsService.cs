@@ -42,7 +42,7 @@ namespace keepr.Services
         internal Keep Edit(Keep keepData, string userId)
         {
             Keep original = Get(keepData.Id);
-            if (original.CreatorId != userId && keepData.Name == null && keepData.Description == null && keepData.Img == null)
+            if (original.CreatorId != userId)
             {
                 original.Views = keepData.Views > 0 ? keepData.Views : original.Views;
                 original.Kept = keepData.Kept > 0 ? keepData.Kept : original.Kept;
