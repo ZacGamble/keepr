@@ -15,7 +15,7 @@
         aria-expanded="false"
         id="authDropdown"
       >
-        <div v-if="account.picture">
+        <div v-if="account.picture" class="bg-dark p-2 rounded">
           <img
             :src="account.picture"
             alt="account photo"

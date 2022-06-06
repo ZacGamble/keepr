@@ -10,18 +10,21 @@
               placeholder="Title..."
               class="mt-4 p-2 rounded"
               v-model="formData.name"
+              required
             />
             <input
               type="text"
               placeholder="Description..."
               class="mt-4 p-2 rounded"
               v-model="formData.description"
+              required
             />
             <input
               type="text"
               placeholder="Image URL..."
               class="mt-4 p-2 rounded"
               v-model="formData.img"
+              required
             />
             <div class="d-flex align-items-center">
               <input

@@ -10,7 +10,7 @@
               placeholder="Title..."
               required
               minlength="3"
-              maxlength="20"
+              maxlength="15"
               class="my-3 p-2 rounded"
               v-model="formData.name"
             />
@@ -26,6 +26,7 @@
               maxlength="120"
               class="p-2 my-2 rounded"
               v-model="formData.description"
+              required
             ></textarea>
           </div>
           <button class="btn btn-primary">Create</button>

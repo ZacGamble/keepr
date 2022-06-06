@@ -8,7 +8,14 @@ class VaultsService {
         formData.creatorId = AppState.account.id
         const res = await api.post("api/vaults", formData)
         AppState.userVaults.unshift(res.data);
+        AppState.myVaults.unshift(res.data);
         logger.log('created vault > vaultsService.js >', res.data)
+    }
+
+    async getById(vaultId){
+        const res = await api.get("api/vaults/" + vaultId)
+        AppState.activeVault = res.data
+        logger.log("the active vault > vaultsService > ", AppState.activeVault)
     }
 
     async getUserVaults(profileId){

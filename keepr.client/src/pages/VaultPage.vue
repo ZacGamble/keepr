@@ -11,9 +11,9 @@
     </div>
   </div>
 
-  <div class="masonry-container">
+  <div class="masonry-container p-2">
     <div class="keep-container" v-for="k in vaultKeeps" :key="k.id">
-      <div class="p-3" style="min-height: 20vh">
+      <div class="p-1" style="">
         <img
           @click="openVaultKeepModal(k)"
           :src="k.img"
@@ -50,6 +50,7 @@ import { AppState } from '../AppState.js';
 import { vaultsService } from '../services/VaultsService.js';
 import { Modal } from 'bootstrap';
 import { keepsService } from '../services/KeepsService.js';
+import { AuthService } from '../services/AuthService.js';
 
 export default {
   setup() {
@@ -57,11 +58,13 @@ export default {
     const router = useRouter();
     onMounted(async () => {
       try {
-        // await this.checkAccess() TODO Need to push home manual URL load-in aliens
+        // TODO Need to push home manual URL load-in aliens
+        await vaultsService.getById(route.params.id)
         await vaultKeepsService.getKeepsByVaultId(route.params.id)
       } catch (error) {
+        router.push({ name: 'Home' });
         logger.error(error)
-        Pop.toast(error.message, 'error')
+        Pop.toast("You were not invited.", 'error')
       }
     })
     return {
@@ -88,15 +91,6 @@ export default {
         AppState.activeKeep = k;
         Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
         await keepsService.incrementViews();
-      },
-
-      checkAccess() {
-        const userId = AppState.account.id
-        if (v.isPrivate && v.creatorId != userId) {
-          router.push({ name: 'Home' })
-          Pop.toast("Sorry, you weren't invited..")
-          return
-        }
       },
 
     }
@@ -132,7 +126,7 @@ export default {
   }
 }
 .keep-name {
-  transform: translateY(-3em);
+  transform: translateY(-4em);
   margin-left: 0.8em;
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;
