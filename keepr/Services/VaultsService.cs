@@ -8,10 +8,12 @@ namespace keepr.Services
     public class VaultsService
     {
         private readonly VaultsRepository _repo;
+        private readonly AccountService _acctServ;
 
-        public VaultsService(VaultsRepository repo)
+        public VaultsService(VaultsRepository repo, AccountService acctServ)
         {
             _repo = repo;
+            _acctServ = acctServ;
         }
 
         internal Vault Create(Vault vaultData, string userId)
@@ -82,8 +84,11 @@ namespace keepr.Services
         {
 
             List<Vault> foundVaults = _repo.GetVaultsByCreatorId(profileId);
-
-            // foundVaults = foundVaults.FindAll(v => v.IsPrivate == false);
+            Account foundAccount = _acctServ.GetAccountById(profileId);
+            if (foundAccount.Id != profileId)
+            {
+                foundVaults = foundVaults.FindAll(v => v.IsPrivate == false);
+            }
 
             return foundVaults;
         }

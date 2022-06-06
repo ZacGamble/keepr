@@ -58,6 +58,7 @@ import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { vaultKeepsService } from '../services/VaultKeepsService'
+import { Modal } from 'bootstrap'
 export default {
   setup() {
     return {
@@ -65,7 +66,9 @@ export default {
 
       async removeFromVault() {
         try {
-          await vaultKeepsService.removeFromVault(AppState.activeKeep.id)
+          await vaultKeepsService.removeFromVault()
+          Pop.toast("This keep was removed from your vault", 'success')
+          Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).hide()
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

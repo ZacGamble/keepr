@@ -83,6 +83,7 @@ export default {
       },
 
       async openVaultKeepModal(k) {
+        logger.log(k)
         AppState.activeKeep = k;
         Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
         await keepsService.incrementViews();

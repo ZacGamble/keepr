@@ -18,12 +18,14 @@ class VaultKeepsService{
     async getKeepsByVaultId(vaultId){
         const res = await api.get(`api/vaults/${vaultId}/keeps`)
         AppState.vaultKeeps = res.data
-        logger.log("the keeps in this vault > ", res.data)
+        logger.log("the keeps in this vault > VaultKeepService > ", res.data)
     }
 
-    async removeFromVault(keepId){
-        await api.delete("api/vaultkeeps/" + keepId)
-        //FIXME this is the where the lack of vaultKeepId's makes things fall apart
+    async removeFromVault(){
+        const vaultKeepId = AppState.activeKeep.vaultKeepId
+        await api.delete("api/vaultkeeps/" + vaultKeepId)
+        const index = AppState.vaultKeeps.find(vk => vk.id == vaultKeepId)
+        AppState.vaultKeeps.splice(index, 1)
         
     }
 }

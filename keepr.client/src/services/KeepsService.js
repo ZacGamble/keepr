@@ -26,6 +26,7 @@ class KeepsService {
         keep.views ++
         const res = await api.put("api/keeps/" + id, keep)
         AppState.activeKeep = res.data
+        AppState.activeKeep.vaultKeepId = keep.vaultKeepId
         logger.log("the updated active Keep > keeps Service > ", AppState.activeKeep)
     }
 
