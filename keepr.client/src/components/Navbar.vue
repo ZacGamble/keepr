@@ -28,8 +28,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <!-- LOGIN COMPONENT HERE -->
-      <Login />
     </div>
+    <Login />
   </nav>
 </template>
 

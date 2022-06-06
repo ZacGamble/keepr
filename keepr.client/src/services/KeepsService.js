@@ -5,7 +5,7 @@ import { api } from "./AxiosService";
 class KeepsService {
     async create(formData){
         const res = await api.post("api/keeps", formData)
-        AppState.userKeeps.unshift(res.data)
+        AppState.keeps.unshift(res.data)
         logger.log(res.data)
     }
     async getAll(){
@@ -19,6 +19,15 @@ class KeepsService {
         AppState.keeps = res.data;
         AppState.keeps.reverse()
         logger.log("Get user Keeps > ", AppState.keeps)
+    }
+
+    async incrementViews(){
+        const keep = AppState.activeKeep
+        const id = keep.id
+        keep.views ++
+        const res = await api.put("api/keeps/" + id, keep)
+        AppState.activeKeep = res.data
+        logger.log("the updated active Keep > keeps Service > ", AppState.activeKeep)
     }
 
     async deleteKeep(){

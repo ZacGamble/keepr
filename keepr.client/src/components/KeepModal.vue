@@ -29,32 +29,31 @@
                 <p class="mb-4">{{ activeKeep?.description }}</p>
               </div>
             </div>
-            <div class="row">
-              <div class="d-flex responsive-div">
-                <form title="Add to a vault" @submit.prevent="addKeepToVault()">
-                  <select name="add-to-vault-select" v-model="vaultSelect">
-                    <option v-for="mv in myVaults" :key="mv" :value="mv.id">
-                      {{ mv?.name.substring(0, 15) }}
-                    </option>
-                  </select>
-                  <button class="btn btn-secondary mt-2 ms-2">
-                    Add To Vault
-                  </button>
-                </form>
-                <i
-                  v-if="activeKeep?.creatorId == account.id"
-                  class="mdi mdi-delete fs-1 ms-4 action"
-                  title="delete keep"
-                  @click="deleteKeep()"
-                ></i>
-                <div>
-                  <img
-                    :src="activeKeep?.creator.picture"
-                    alt=""
-                    class="img-fluid thumbnail-img"
-                  />
-                  {{ activeKeep?.creator.name }}
-                </div>
+
+            <div class="d-flex responsive-div">
+              <form title="Add to a vault" @submit.prevent="addKeepToVault()">
+                <select name="add-to-vault-select" v-model="vaultSelect">
+                  <option v-for="mv in myVaults" :key="mv" :value="mv.id">
+                    {{ mv?.name.substring(0, 15) }}
+                  </option>
+                </select>
+                <button class="btn btn-secondary mt-2 ms-2">
+                  Add To Vault
+                </button>
+              </form>
+              <i
+                v-if="activeKeep?.creatorId == account.id"
+                class="mdi mdi-delete fs-1 ms-4 action"
+                title="delete keep"
+                @click="deleteKeep()"
+              ></i>
+              <div>
+                <img
+                  :src="activeKeep?.creator.picture"
+                  alt=""
+                  class="img-fluid thumbnail-img"
+                />
+                {{ activeKeep?.creator.name }}
               </div>
             </div>
           </div>
@@ -119,7 +118,7 @@ export default {
 .responsive-div {
   background-color: var(primary);
   align-items: center;
-  transform: translateY(2em);
+  transform: translateY(0em);
 }
 
 @media only screen and (max-width: 1200px) {
@@ -133,6 +132,7 @@ export default {
   .responsive-div {
     transform: translateX(-12em);
     align-items: center;
+    margin-top: 2em;
   }
 }
 @media only screen and (max-width: 768px) {

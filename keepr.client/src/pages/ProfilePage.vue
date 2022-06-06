@@ -110,10 +110,11 @@ export default {
       numberOfKeeps: computed(() => AppState.userKeeps.length),
       numberOfVaults: computed(() => AppState.userVaults.length),
 
-      openKeepModal(k) {
+      async openKeepModal(k) {
         AppState.activeKeep = k;
         logger.log(AppState.activeKeep)
         Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
+        await keepsService.incrementViews();
       },
 
       async goToVault(v) {
