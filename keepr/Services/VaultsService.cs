@@ -25,21 +25,25 @@ namespace keepr.Services
             return _repo.Create(vaultData);
         }
 
-        internal Vault Get(int id)
+        internal Vault Get(int id, string userId)
         {
             Vault found = _repo.Get(id);
+
             if (found == null)
             {
                 throw new Exception("Invalid ID");
             }
-
+            if (userId != found.CreatorId && found.IsPrivate)
+            {
+                throw new Exception("This is a private vault");
+            }
 
             return found;
         }
 
         internal Vault Edit(Vault vaultData, string userId)
         {
-            Vault original = Get(vaultData.Id);
+            Vault original = Get(vaultData.Id, userId);
             if (original.CreatorId != userId)
             {
                 throw new Exception("O' you don't have the right!");
@@ -55,7 +59,7 @@ namespace keepr.Services
 
         internal void Delete(int id, string userId)
         {
-            Vault original = Get(id);
+            Vault original = Get(id, userId);
             if (original.CreatorId != userId)
             {
                 throw new Exception("O' you don't have the right!");
@@ -66,7 +70,7 @@ namespace keepr.Services
         internal List<VaultKeepViewModel> GetVaultKeepsById(int id, string userId)
 
         {
-            Vault found = Get(id);
+            Vault found = Get(id, userId);
             if (found.IsPrivate && found.CreatorId != userId)
             {
                 throw new Exception("You do not have access");

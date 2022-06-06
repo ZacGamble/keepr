@@ -14,11 +14,14 @@ namespace keepr.Services
 
         internal VaultKeep Create(VaultKeep vaultKeepData, string userId)
         {
-            if (vaultKeepData.CreatorId != userId)
-            {
-                throw new System.Exception("You do not have the right to post this.");
-            }
+
             VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
+            // FIXME figure out how to verify ownership here
+
+            // if (newVaultKeep.CreatorId != userId)
+            // {
+            //     throw new System.Exception("You do not have the right to post this.");
+            // }
 
             return newVaultKeep;
 

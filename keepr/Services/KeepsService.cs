@@ -42,17 +42,24 @@ namespace keepr.Services
         internal Keep Edit(Keep keepData, string userId)
         {
             Keep original = Get(keepData.Id);
-            if (original.CreatorId != userId)
+            if (original.CreatorId != userId && keepData.Name == null && keepData.Description == null && keepData.Img == null)
             {
-                throw new Exception("You do not own this keep");
+                original.Views = keepData.Views > 0 ? keepData.Views : original.Views;
+                original.Kept = keepData.Kept > 0 ? keepData.Kept : original.Kept;
+                _repo.Edit(original);
+                return original;
             }
-            original.Name = keepData.Name ?? original.Name;
-            original.Description = keepData.Description ?? original.Description;
-            original.Img = keepData.Img ?? original.Img;
-            original.Views = keepData.Views > 0 ? keepData.Views : original.Views;
-            original.Kept = keepData.Kept > 0 ? keepData.Kept : original.Kept;
-            _repo.Edit(original);
-            return original;
+            if (original.CreatorId == userId)
+            {
+                original.Name = keepData.Name ?? original.Name;
+                original.Description = keepData.Description ?? original.Description;
+                original.Img = keepData.Img ?? original.Img;
+                original.Views = keepData.Views > 0 ? keepData.Views : original.Views;
+                original.Kept = keepData.Kept > 0 ? keepData.Kept : original.Kept;
+                _repo.Edit(original);
+                return original;
+            }
+            else { throw new Exception("something went wrong"); }
         }
 
         internal void Delete(int id, string userId)

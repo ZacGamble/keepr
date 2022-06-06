@@ -7,7 +7,7 @@
             <img
               :src="activeKeep?.img"
               alt="keep image"
-              class="img-fluid rounded"
+              class="img-fluid rounded keep-img"
             />
           </div>
           <div class="col-md-6">
@@ -140,6 +140,11 @@ export default {
 .position {
   position: relative;
 }
+
+.keep-img {
+  max-height: 90vh;
+}
+
 @media only screen and (max-width: 991.8px) {
   .position {
     position: relative;

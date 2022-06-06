@@ -75,7 +75,7 @@ namespace keepr.Controllers
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 keepData.Id = id;
-                Keep keep = _ks.Edit(keepData, userInfo.Id);
+                Keep keep = _ks.Edit(keepData, userInfo?.Id);
                 return Ok(keep);
             }
             catch (System.Exception e)
