@@ -26,8 +26,8 @@
       >
         <!-- Vaults -->
         <div
-          class="p-2 mt-2 bg-dark text-light rounded selectable"
-          @click="goToVault(v.id)"
+          class="p-2 mt-2 vault-text rounded selectable"
+          @click="goToVault(v)"
           style="background-size: cover"
           :style="`background-image: url(${v.img})`"
         >
@@ -105,7 +105,7 @@ export default {
       route,
       account: computed(() => AppState.account),
       profile: computed(() => AppState.activeProfile),
-      keeps: computed(() => AppState.userKeeps),
+      keeps: computed(() => AppState.keeps),
       vaults: computed(() => AppState.userVaults),
       numberOfKeeps: computed(() => AppState.userKeeps.length),
       numberOfVaults: computed(() => AppState.userVaults.length),
@@ -116,9 +116,14 @@ export default {
         Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
       },
 
-      goToVault(v) {
-        logger.log(v)
-        router.push({ name: 'Vault', params: { id: v } })
+      async goToVault(v) {
+        const userId = AppState.account.id
+        if (v.isPrivate && v.creatorId != userId) {
+          router.push({ name: 'Home' })
+          Pop.toast("Sorry, you weren't invited..")
+          return
+        }
+        router.push({ name: 'Vault', params: { id: v.id } })
       },
 
       createVault() {
@@ -163,28 +168,10 @@ export default {
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;
 }
+// #endregion
 
-.masonry-container {
-  column-count: 5;
-  column-gap: 0.3em;
-}
-
-@media only screen and (max-width: 1068px) {
-  .masonry-container {
-    column-count: 4;
-    column-gap: 0.5em;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .masonry-container {
-    column-count: 2;
-    column-gap: 0.5em;
-  }
-}
-@media only screen and (max-width: 575px) {
-  .masonry-container {
-    column-count: 1;
-  }
-  // #endregion
+.vault-text {
+  color: whitesmoke;
+  text-shadow: 3px 3px 4px black;
 }
 </style>

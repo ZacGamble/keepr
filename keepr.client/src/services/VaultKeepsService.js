@@ -16,6 +16,12 @@ class VaultKeepsService{
         AppState.vaultKeeps = res.data
         logger.log("the keeps in this vault > ", res.data)
     }
+
+    async removeFromVault(keepId){
+        await api.delete("api/vaultkeeps/" + keepId)
+        //FIXME this is the where the lack of vaultKeepId's makes things fall apart
+        
+    }
 }
 
 export const vaultKeepsService = new VaultKeepsService();

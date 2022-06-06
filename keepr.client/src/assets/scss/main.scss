@@ -26,6 +26,7 @@ select {
     &:valid {
       border: 1px solid $success;
     }
+
     &:invalid {
       border: 1px solid $danger;
     }
@@ -35,4 +36,29 @@ select {
 form:invalid button[type="submit"] {
   filter: grayscale(1);
   pointer-events: none;
+}
+
+.masonry-container {
+  column-count: 4;
+  column-gap: 0.5em;
+}
+
+@media only screen and (max-width: 1068px) {
+  .masonry-container {
+    column-count: 3;
+    column-gap: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .masonry-container {
+    column-count: 2;
+    column-gap: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .masonry-container {
+    column-count: 1;
+  }
 }

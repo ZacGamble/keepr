@@ -1,5 +1,5 @@
 <template>
-  <Modal id="keep-modal">
+  <Modal id="vaultkeep-modal">
     <template #modal-body-slot>
       <div class="container-fluid">
         <div class="row">
@@ -31,8 +31,10 @@
             </div>
             <div class="row">
               <div class="d-flex responsive-div">
-                <button class="btn btn-danger">Remove From Vault</button>
-                <div>
+                <button class="btn btn-danger" @click="removeFromVault()">
+                  Remove From Vault
+                </button>
+                <div class="d-flex justify-content-center align-items-center">
                   <img
                     :src="activeKeep?.creator.picture"
                     alt=""
@@ -53,10 +55,22 @@
 <script>
 import { computed } from '@vue/reactivity'
 import { AppState } from '../AppState'
+import { logger } from '../utils/Logger'
+import Pop from '../utils/Pop'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   setup() {
     return {
-      activeKeep: computed(() => AppState.activeKeep)
+      activeKeep: computed(() => AppState.activeKeep),
+
+      async removeFromVault() {
+        try {
+          await vaultKeepsService.removeFromVault(AppState.activeKeep.id)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
     }
   }
 }

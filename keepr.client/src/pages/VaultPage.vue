@@ -5,13 +5,15 @@
       <div class="my-3 fw-bold">Keeps in this vault:</div>
     </div>
     <div class="p-4">
-      <button class="btn btn-outline-danger">Delete Vault</button>
+      <button class="btn btn-outline-danger" @click="deleteVault()">
+        Delete Vault
+      </button>
     </div>
   </div>
-  <hr />
+
   <div class="masonry-container">
     <div class="keep-container" v-for="k in vaultKeeps" :key="k.id">
-      <div class="p-2" style="min-height: 20vh">
+      <div class="p-3" style="min-height: 20vh">
         <img
           @click="openVaultKeepModal(k)"
           :src="k.img"
@@ -34,21 +36,27 @@
       </div>
     </div>
   </div>
+  <VaultKeepModal />
 </template>
 
 
 <script>
 import { computed, onMounted } from '@vue/runtime-core';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { vaultKeepsService } from '../services/VaultKeepsService.js'
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { AppState } from '../AppState.js';
+import { vaultsService } from '../services/VaultsService.js';
+import { Modal } from 'bootstrap';
+
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     onMounted(async () => {
       try {
+        await checkAccess()
         await vaultKeepsService.getKeepsByVaultId(route.params.id)
       } catch (error) {
         logger.error(error)
@@ -57,7 +65,35 @@ export default {
     })
     return {
       route,
+      router,
       vaultKeeps: computed(() => AppState.vaultKeeps),
+
+      async deleteVault() {
+        try {
+          await vaultsService.deleteVault(route.params.id);
+          router.push({ name: 'Home' });
+          Pop.toast("Your vault has been permanantly destroyed.")
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+
+      openVaultKeepModal(k) {
+        AppState.activeKeep = k;
+        logger.log(AppState.activeKeep)
+        Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
+      },
+
+      checkAccess() {
+        const userId = AppState.account.id
+        if (v.isPrivate && v.creatorId != userId) {
+          router.push({ name: 'Home' })
+          Pop.toast("Sorry, you weren't invited..")
+          return
+        }
+      },
+
     }
   }
 }
@@ -65,4 +101,21 @@ export default {
 
 
 <style lang="scss" scoped>
+.img-custom {
+  border-radius: 7%;
+  box-shadow: 3px 3px 12px black;
+  cursor: pointer;
+}
+// .img-custom:hover {
+//   transform: scale(1);
+// }
+.keep-container {
+  padding: 10px;
+}
+.keep-name {
+  transform: translateY(-3em);
+  margin-left: 0.8em;
+  color: whitesmoke;
+  text-shadow: 3px 3px 4px black;
+}
 </style>

@@ -17,6 +17,12 @@ class VaultsService {
         AppState.userVaults.reverse();
         logger.log("Get user vaults > ", AppState.userVaults)
     }
+
+    async deleteVault(vaultId){
+        await api.delete("api/vaults/" + vaultId)
+        const index = AppState.userVaults.find(v => v.id == vaultId)
+        AppState.userVaults.splice(index, 1)
+    }
 }
 
 export const vaultsService = new VaultsService()

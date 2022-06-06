@@ -16,9 +16,16 @@ class KeepsService {
     }
     async getUserKeeps(profileId){
         const res = await api.get("api/profiles/"+ profileId + "/keeps")
-        AppState.userKeeps = res.data;
-        AppState.userKeeps.reverse()
-        logger.log("Get user Keeps > ", AppState.userKeeps)
+        AppState.keeps = res.data;
+        AppState.keeps.reverse()
+        logger.log("Get user Keeps > ", AppState.keeps)
+    }
+
+    async deleteKeep(){
+        const id = AppState.activeKeep.id
+        await api.delete("api/keeps/" + id)
+        const index = AppState.keeps.find(k => k.id == id)
+        AppState.keeps.splice(index, 1)
     }
 }
 

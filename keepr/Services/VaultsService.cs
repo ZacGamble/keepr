@@ -83,7 +83,7 @@ namespace keepr.Services
 
             List<Vault> foundVaults = _repo.GetVaultsByCreatorId(profileId);
 
-            foundVaults = foundVaults.FindAll(v => v.IsPrivate == false);
+            // foundVaults = foundVaults.FindAll(v => v.IsPrivate == false);
 
             return foundVaults;
         }

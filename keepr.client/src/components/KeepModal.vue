@@ -41,7 +41,12 @@
                     Add To Vault
                   </button>
                 </form>
-                <i class="mdi mdi-delete fs-1 ms-4"></i>
+                <i
+                  v-if="activeKeep?.creatorId == account.id"
+                  class="mdi mdi-delete fs-1 ms-4 action"
+                  title="delete keep"
+                  @click="deleteKeep()"
+                ></i>
                 <div>
                   <img
                     :src="activeKeep?.creator.picture"
@@ -69,6 +74,8 @@ import Pop from '../utils/Pop'
 import { onMounted } from '@vue/runtime-core'
 import { AuthService } from '../services/AuthService'
 import { vaultKeepsService } from '../services/VaultKeepsService'
+import { keepsService } from '../services/KeepsService'
+import { Modal } from 'bootstrap'
 export default {
   setup() {
     const vaultSelect = ref({})
@@ -76,11 +83,22 @@ export default {
       vaultSelect,
       myVaults: computed(() => AppState.myVaults),
       activeKeep: computed(() => AppState.activeKeep),
+      account: computed(() => AppState.account),
 
       async addKeepToVault() {
         try {
           logger.log(vaultSelect.value)
           await vaultKeepsService.addKeepToVault(vaultSelect.value)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async deleteKeep() {
+        try {
+          await keepsService.deleteKeep()
+          Pop.toast("Keep disposed of. Successfully.")
+          Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide()
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

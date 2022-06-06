@@ -1,7 +1,7 @@
 <template>
   <div class="masonry-container">
     <div class="keep-container" v-for="k in keeps" :key="k.id">
-      <div class="p-2" style="min-height: 20vh">
+      <div class="p-3" style="min-height: 20vh">
         <img
           @click="openKeepModal(k)"
           :src="k.img"
@@ -97,28 +97,5 @@ export default {
   height: 4em;
   transform: translateY(-6em);
   margin-right: 0.5em;
-}
-
-.masonry-container {
-  column-count: 4;
-  column-gap: 0.5em;
-}
-
-@media only screen and (max-width: 1068px) {
-  .masonry-container {
-    column-count: 3;
-    column-gap: 0.5em;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .masonry-container {
-    column-count: 2;
-    column-gap: 0.5em;
-  }
-}
-@media only screen and (max-width: 425px) {
-  .masonry-container {
-    column-count: 1;
-  }
 }
 </style>
