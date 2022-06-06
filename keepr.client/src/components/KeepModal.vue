@@ -91,9 +91,7 @@ export default {
 
       async addKeepToVault() {
         try {
-          logger.log("The select values", vaultSelect.value)
           await vaultKeepsService.addKeepToVault(vaultSelect.value)
-          // await vaultsService.incrementVaultKeeps(vaultSelect.value)
           Pop.toast("Keep added to your vault!", 'success')
         } catch (error) {
           logger.error(error)

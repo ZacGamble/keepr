@@ -50,7 +50,7 @@
           >+</i
         >
       </h3>
-      <div class="masonry-container">
+      <div class="masonry-container-profile">
         <div class="keep-container" v-for="k in keeps" :key="k.id">
           <!-- Keep Masonry -->
           <div class="p-2">
@@ -62,9 +62,9 @@
               :title="'Open ' + k.name + ' details'"
             />
             <div class="d-flex justify-content-between" style="height: 0px">
-              <h2 class="keep-name">
+              <h5 class="keep-name">
                 {{ k.name }}
-              </h2>
+              </h5>
             </div>
           </div>
         </div>
@@ -112,7 +112,6 @@ export default {
 
       async openKeepModal(k) {
         AppState.activeKeep = k;
-        logger.log(AppState.activeKeep)
         Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
         await keepsService.incrementViews();
       },
@@ -192,16 +191,29 @@ export default {
   animation-name: fadeInto;
   animation-duration: 5000ms;
 }
-@keyframes fadeInto {
-  0% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 0;
-  }
 
-  100% {
-    opacity: 100;
+.masonry-container-profile {
+  column-count: 6;
+  column-gap: 0.5em;
+}
+
+@media only screen and (max-width: 1068px) {
+  .masonry-container-profile {
+    column-count: 4;
+    column-gap: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .masonry-container-profile {
+    column-count: 2;
+    column-gap: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .masonry-container-profile {
+    column-count: 1;
   }
 }
 </style>

@@ -5,7 +5,6 @@ import { api } from "./AxiosService";
 class VaultKeepsService{
 
     async addKeepToVault(vault){
-        debugger
         const vaultKeep = {}
         vaultKeep.vaultId = vault.id
         vaultKeep.keepId = AppState.activeKeep.id
@@ -14,7 +13,7 @@ class VaultKeepsService{
         
         modifiedKeep.kept++
         const incrementRes = await api.put("api/keeps/"+modifiedKeep.id, modifiedKeep)
-        logger.log("The incremented keep", res.data)
+        // logger.log("The incremented keep", res.data)
     }
     async getKeepsByVaultId(vaultId){
         const res = await api.get(`api/vaults/${vaultId}/keeps`)

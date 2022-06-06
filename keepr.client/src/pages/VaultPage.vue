@@ -81,7 +81,6 @@ export default {
 
       openVaultKeepModal(k) {
         AppState.activeKeep = k;
-        logger.log(AppState.activeKeep)
         Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
       },
 

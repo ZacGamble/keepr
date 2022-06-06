@@ -11,7 +11,7 @@
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
         <h2>
-          <em class="p-1 fw-bold fs-1 shade">H</em>
+          <em class="p-1 fw-bold fs-1 shade">Keepr</em>
         </h2>
       </div>
     </router-link>

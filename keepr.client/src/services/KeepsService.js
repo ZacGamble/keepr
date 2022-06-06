@@ -6,7 +6,6 @@ class KeepsService {
     async create(formData){
         const res = await api.post("api/keeps", formData)
         AppState.keeps.unshift(res.data)
-        logger.log(res.data)
     }
     async getAll(){
         const res = await api.get("api/keeps")
