@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex justify-content-between">
     <div class="flex-column p-3">
-      <h1 class="my-3">Vault Name</h1>
-      <div class="my-3 fw-bold">Keeps in this vault:</div>
+      <h1 class="my-3">{{ activeVault?.name }}</h1>
+      <div class="my-3 fw-bold">Keeps in this vault: {{ keepsInVault }}</div>
     </div>
     <div class="p-4">
       <button class="btn btn-outline-danger" @click="deleteVault()">
@@ -49,6 +49,7 @@ import Pop from '../utils/Pop';
 import { AppState } from '../AppState.js';
 import { vaultsService } from '../services/VaultsService.js';
 import { Modal } from 'bootstrap';
+import { keepsService } from '../services/KeepsService.js';
 
 export default {
   setup() {
@@ -67,6 +68,8 @@ export default {
       route,
       router,
       vaultKeeps: computed(() => AppState.vaultKeeps),
+      keepsInVault: computed(() => AppState.vaultKeeps.length),
+      activeVault: computed(() => AppState.activeVault),
 
       async deleteVault() {
         try {
@@ -79,9 +82,10 @@ export default {
         }
       },
 
-      openVaultKeepModal(k) {
+      async openVaultKeepModal(k) {
         AppState.activeKeep = k;
         Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
+        await keepsService.incrementViews();
       },
 
       checkAccess() {

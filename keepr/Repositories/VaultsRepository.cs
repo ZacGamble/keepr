@@ -59,11 +59,12 @@ namespace keepr.Repositories
         internal List<VaultKeepViewModel> GetVaultKeepViewModelFromVault(int id)
         {
             //FIXME I need to get keeps via VaultId utilizing the VaultKeep Object relationship.
+            //NOTE The "vk.id AS vaultKeepId" MUST come after k.* and before a.*
             string sql = @"
             SELECT 
                 k.*,
-                a.*,
-                vk.id AS vaultKeepId
+                vk.id AS vaultKeepId,
+                a.*
             FROM vaultkeeps vk
             JOIN keeps k ON vk.keepId = k.id
             JOIN accounts a ON k.creatorId = a.id
