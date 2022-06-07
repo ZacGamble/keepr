@@ -33,9 +33,18 @@
               <div class="p-2 border-bottom border-dark">
                 <h1 class="text-center">{{ activeKeep?.name }}</h1>
                 <p class="mb-4">{{ activeKeep?.description }}</p>
+                <div class="d-flex justify-content-end">
+                  <i
+                    v-if="activeKeep?.creatorId == account.id"
+                    class="mdi mdi-delete fs-1 ms-4 action"
+                    title="delete keep"
+                    @click="deleteKeep()"
+                  ></i>
+                </div>
               </div>
             </div>
 
+            <!-- The troublemaker -->
             <div class="d-flex responsive-div">
               <form @submit.prevent="addKeepToVault()">
                 <label class="p-2" for="add-to-vault-select"
@@ -69,13 +78,8 @@
                   title="Submit"
                 ></i>
               </form>
-              <i
-                v-if="activeKeep?.creatorId == account.id"
-                class="mdi mdi-delete fs-1 ms-4 action"
-                title="delete keep"
-                @click="deleteKeep()"
-              ></i>
-              <div>
+
+              <div class="mt-1 theProfile">
                 <img
                   :src="activeKeep?.creator.picture"
                   alt=""
@@ -170,6 +174,11 @@ export default {
     margin-right: 20px;
   }
 }
+@media only screen and (max-width: 991.8px) {
+  .theProfile {
+    position: relative;
+  }
+}
 
 .responsive-div {
   background-color: var(primary);
@@ -180,7 +189,6 @@ export default {
 @media only screen and (max-width: 1200px) {
   .responsive-div {
     transform: translateX(0em);
-    align-items: center;
   }
 }
 
@@ -190,9 +198,7 @@ export default {
     transform: translateY(-1em);
     align-items: center;
     justify-content: center;
-    padding: 0px 1em 0px 1em;
     flex-direction: column;
-    margin-left: 1em;
   }
 }
 @media only screen and (max-width: 768px) {
@@ -205,7 +211,7 @@ export default {
 .thumbnail-img {
   height: 3em;
   border-radius: 50%;
-  margin-left: 3em;
+  margin-left: 2em;
   cursor: pointer;
 }
 </style>
