@@ -6,10 +6,12 @@ namespace keepr.Services
     public class VaultKeepsService
     {
         private readonly VaultKeepsRepository _repo;
+        private readonly VaultsService _vs;
 
-        public VaultKeepsService(VaultKeepsRepository repo)
+        public VaultKeepsService(VaultKeepsRepository repo, VaultsService vs)
         {
             _repo = repo;
+            _vs = vs;
         }
 
         internal VaultKeep Create(VaultKeep vaultKeepData, string userId)
@@ -18,12 +20,14 @@ namespace keepr.Services
             {
                 throw new System.Exception("You must be logged in to post.");
             }
+            Vault vault = _vs.Get(vaultKeepData.VaultId, userId);
+            if (vault.CreatorId != userId)
+            {
+                throw new System.Exception("Forbidden post action!");
+            }
             // FIXME figure out how to verify ownership here
             VaultKeep newVaultKeep = _repo.Create(vaultKeepData);
-            if (userId != newVaultKeep.CreatorId)
-            {
-                throw new System.Exception("You must be logged in to post");
-            }
+
             return newVaultKeep;
 
         }

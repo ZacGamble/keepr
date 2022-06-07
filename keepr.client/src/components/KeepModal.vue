@@ -66,7 +66,7 @@
                     {{ mv?.name.substring(0, 15) }}
                   </option>
                 </select>
-                <i
+                <button
                   class="
                     mdi mdi-check-outline
                     m-2
@@ -76,7 +76,8 @@
                     selectable
                   "
                   title="Submit"
-                ></i>
+                  type="submit"
+                ></button>
               </form>
 
               <div class="mt-1 theProfile">

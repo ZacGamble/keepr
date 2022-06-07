@@ -44,6 +44,8 @@ namespace keepr.Services
             Keep original = Get(keepData.Id);
             if (original.CreatorId != userId)
             {
+                if (keepData.Name != null && keepData.Description != null)
+                { throw new Exception("You're trying to edit forbidden properties."); }
                 original.Views = keepData.Views > 0 ? keepData.Views : original.Views;
                 original.Kept = keepData.Kept > 0 ? keepData.Kept : original.Kept;
                 _repo.Edit(original);

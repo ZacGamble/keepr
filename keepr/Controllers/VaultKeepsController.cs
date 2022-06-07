@@ -21,12 +21,12 @@ namespace keepr.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<VaultKeep>> Create([FromBody] VaultKeep vaultKeepData, string userId)
+        public async Task<ActionResult<VaultKeep>> Create([FromBody] VaultKeep vaultKeepData)
         {
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-                if (userInfo == null) { Response.StatusCode = 403; }
+                if (userInfo == null) { throw new Exception("Forbidden post action"); }
                 vaultKeepData.CreatorId = userInfo.Id;
                 VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo?.Id);
                 return Ok(newVaultKeep);
