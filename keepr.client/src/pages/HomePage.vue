@@ -105,7 +105,7 @@ export default {
   }
 }
 .keep-name {
-  transform: translateY(-3em);
+  transform: translateY(-3.5em);
   margin-left: 0.8em;
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;

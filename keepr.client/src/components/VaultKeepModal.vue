@@ -47,6 +47,7 @@
                     :src="activeKeep?.creator.picture"
                     alt=""
                     class="img-fluid thumbnail-img me-2"
+                    style="max-height: 90vh"
                   />
                   {{ activeKeep?.creator.name }}
                 </div>
