@@ -26,6 +26,7 @@ namespace keepr.Controllers
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                if (userInfo == null) { Response.StatusCode = 403; }
                 vaultKeepData.CreatorId = userInfo.Id;
                 VaultKeep newVaultKeep = _vks.Create(vaultKeepData, userInfo?.Id);
                 return Ok(newVaultKeep);

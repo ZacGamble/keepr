@@ -75,9 +75,11 @@ export default {
 
       async removeFromVault() {
         try {
-          await vaultKeepsService.removeFromVault()
-          Pop.toast("This keep was removed from your vault", 'success')
-          Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).hide()
+          if (await Pop.confirm()) {
+            await vaultKeepsService.removeFromVault()
+            Pop.toast("This keep was removed from your vault", 'success')
+            Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).hide()
+          }
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
