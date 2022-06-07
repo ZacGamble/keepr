@@ -10,6 +10,7 @@
               class="img-fluid rounded"
             />
           </div>
+          <!-- Begin right side of the modal -->
           <div class="col-md-6">
             <div class="row">
               <div class="d-flex justify-content-evenly align-items-center">
@@ -29,6 +30,7 @@
                 ></button>
               </div>
             </div>
+            <!-- Title and description -->
             <div class="row mt-4 mb-5">
               <div class="p-2 border-bottom border-dark">
                 <h1 class="text-center">{{ activeKeep?.name }}</h1>
@@ -36,8 +38,16 @@
               </div>
             </div>
             <div class="row">
-              <div class="d-flex responsive-div">
-                <button class="btn btn-danger my-2" @click="removeFromVault()">
+              <!-- The troublemaker -->
+              <div
+                class="d-flex responsive-div"
+                style="transform: translateY(-2em)"
+              >
+                <button
+                  v-if="account?.id == activeVault?.creatorId"
+                  class="btn btn-danger my-2"
+                  @click="removeFromVault()"
+                >
                   Remove From Vault
                 </button>
                 <div
@@ -72,6 +82,8 @@ export default {
   setup() {
     return {
       activeKeep: computed(() => AppState.activeKeep),
+      activeVault: computed(() => AppState.activeVault),
+      account: computed(() => AppState.account),
 
       async removeFromVault() {
         try {

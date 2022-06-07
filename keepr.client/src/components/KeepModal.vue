@@ -3,14 +3,15 @@
     <template #modal-body-slot>
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <img
               :src="activeKeep?.img"
               alt="keep image"
               class="img-fluid rounded keep-img"
             />
           </div>
-          <div class="col-md-6">
+          <!-- Begin right side of the modal -->
+          <div class="col-lg-6">
             <div class="row">
               <div class="d-flex justify-content-evenly align-items-center">
                 <div class="d-flex">
@@ -29,14 +30,15 @@
                 ></button>
               </div>
             </div>
-            <div class="row mt-4 mb-5">
+            <!-- The title and description -->
+            <div class="row mt-5 mb-5">
               <div class="p-2 border-bottom border-dark">
                 <h1 class="text-center">{{ activeKeep?.name }}</h1>
                 <p class="mb-4">{{ activeKeep?.description }}</p>
                 <div class="d-flex justify-content-end">
                   <i
                     v-if="activeKeep?.creatorId == account.id"
-                    class="mdi mdi-delete fs-1 ms-4 action"
+                    class="mdi mdi-delete fs-1 ms-4 action trash"
                     title="delete keep"
                     @click="deleteKeep()"
                   ></i>
@@ -45,7 +47,10 @@
             </div>
 
             <!-- The troublemaker -->
-            <div class="d-flex responsive-div">
+            <div
+              class="d-flex responsive-div onethirdheight mb-1"
+              style="transform: translateY(-2em)"
+            >
               <form @submit.prevent="addKeepToVault()">
                 <label class="p-2" for="add-to-vault-select"
                   ><small>Add To Vault:</small></label
@@ -160,12 +165,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.onethirdheight {
+  height: 33%;
+}
 .position {
   position: relative;
 }
+.trash {
+  text-shadow: 1px 1px 1px black;
+}
+.trash:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
 
 .keep-img {
-  max-height: 90vh;
+  max-height: 100%;
 }
 
 @media only screen and (max-width: 991.8px) {
@@ -190,6 +205,7 @@ export default {
 @media only screen and (max-width: 1200px) {
   .responsive-div {
     transform: translateX(0em);
+    flex-direction: column;
   }
 }
 

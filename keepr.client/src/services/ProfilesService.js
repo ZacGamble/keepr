@@ -8,7 +8,6 @@ class ProfilesService {
     {
         const res = await api.get("api/profiles/" + profileId)
         AppState.activeProfile = res.data
-        // logger.log("The active profile > profiles Services >", AppState.activeProfile)
     }
 }
 

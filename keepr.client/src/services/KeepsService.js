@@ -11,13 +11,11 @@ class KeepsService {
         const res = await api.get("api/keeps")
         AppState.keeps = res.data;
         AppState.keeps.reverse()
-        // logger.log("Get All / set active Keeps > ", AppState.keeps)
     }
     async getUserKeeps(profileId){
         const res = await api.get("api/profiles/"+ profileId + "/keeps")
         AppState.keeps = res.data;
         AppState.keeps.reverse()
-        // logger.log("Get user Keeps > ", AppState.keeps)
     }
 
     async incrementViews(){
@@ -27,7 +25,6 @@ class KeepsService {
         const res = await api.put("api/keeps/" + id, keep)
         AppState.activeKeep = res.data
         AppState.activeKeep.vaultKeepId = keep.vaultKeepId
-        logger.log("the updated active Keep > keeps Service > ", AppState.activeKeep)
     }
 
     async deleteKeep(){

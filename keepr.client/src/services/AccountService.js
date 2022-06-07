@@ -17,7 +17,6 @@ class AccountService {
     try {
       const res = await api.get("/account/vaults")
       AppState.myVaults = res.data
-      logger.log("AccountService > Get my vaults > ", AppState.myVaults)
     } catch (error) {
       logger.error(error)
       Pop.toast(error.message, 'error')

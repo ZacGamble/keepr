@@ -9,8 +9,9 @@
           <span>Keeps: {{ numberOfKeeps }}</span>
         </div>
       </div>
+      <hr class="mt-3" />
     </div>
-    <h3 class="" @click="createVault()">
+    <h3 class="my-3" @click="createVault()">
       Vaults:
       <i
         v-if="route.params.id == account.id"
@@ -42,7 +43,7 @@
     </div>
 
     <div class="wrapper">
-      <h3 class="" @click="createKeep()">
+      <h3 class="my-3" @click="createKeep()">
         Keeps:
         <i
           v-if="route.params.id == account.id"

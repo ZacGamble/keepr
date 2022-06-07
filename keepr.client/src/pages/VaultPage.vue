@@ -11,9 +11,9 @@
     </div>
   </div>
 
-  <div class="masonry-container p-2">
+  <div class="masonry-container">
     <div class="keep-container" v-for="k in vaultKeeps" :key="k.id">
-      <div class="p-1" style="">
+      <div class="vaultkeep">
         <img
           @click="openVaultKeepModal(k)"
           :src="k.img"
@@ -90,7 +90,6 @@ export default {
       },
 
       async openVaultKeepModal(k) {
-        logger.log(k)
         AppState.activeKeep = k;
         Modal.getOrCreateInstance(document.getElementById('vaultkeep-modal')).show()
         await keepsService.incrementViews();
@@ -113,6 +112,9 @@ export default {
 // }
 .keep-container {
   padding: 10px;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
   animation-name: fadeInto;
   animation-duration: 5000ms;
 }
@@ -133,5 +135,8 @@ export default {
   margin-left: 0.8em;
   color: whitesmoke;
   text-shadow: 3px 3px 4px black;
+}
+.vaultkeep {
+  max-height: 90%;
 }
 </style>
