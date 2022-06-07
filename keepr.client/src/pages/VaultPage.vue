@@ -78,9 +78,11 @@ export default {
 
       async deleteVault() {
         try {
-          await vaultsService.deleteVault(route.params.id);
-          router.push({ name: 'Home' });
-          Pop.toast("Your vault has been permanantly destroyed.")
+          if (await Pop.confirm()) {
+            await vaultsService.deleteVault(route.params.id);
+            router.push({ name: 'Home' });
+            Pop.toast("Your vault has been permanantly destroyed.")
+          }
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

@@ -37,19 +37,37 @@
             </div>
 
             <div class="d-flex responsive-div">
-              <form title="Add to a vault" @submit.prevent="addKeepToVault()">
+              <form @submit.prevent="addKeepToVault()">
+                <label class="p-2" for="add-to-vault-select"
+                  ><small>Add To Vault:</small></label
+                >
                 <select
                   name="add-to-vault-select"
                   v-model="vaultSelect"
+                  class="action"
+                  title="Add to a vault"
                   required
                 >
-                  <option v-for="mv in myVaults" :key="mv" :value="mv">
+                  <option
+                    v-for="mv in myVaults"
+                    :key="mv"
+                    :value="mv"
+                    class="action"
+                  >
                     {{ mv?.name.substring(0, 15) }}
                   </option>
                 </select>
-                <button class="btn btn-secondary mt-2 ms-2">
-                  Add To Vault
-                </button>
+                <i
+                  class="
+                    mdi mdi-check-outline
+                    m-2
+                    border
+                    p-1
+                    bg-primary
+                    selectable
+                  "
+                  title="Submit"
+                ></i>
               </form>
               <i
                 v-if="activeKeep?.creatorId == account.id"
