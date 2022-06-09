@@ -80,7 +80,7 @@
 <script>
 import { computed } from '@vue/reactivity'
 import { AppState } from '../AppState'
-import { onMounted } from '@vue/runtime-core'
+import { watchEffect } from '@vue/runtime-core'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { profilesService } from '../services/ProfilesService'
@@ -92,11 +92,13 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
-    onMounted(async () => {
+    watchEffect(async () => {
       try {
-        await profilesService.getUserProfile(route.params.id);
-        await keepsService.getUserKeeps(route.params.id);
-        await vaultsService.getUserVaults(route.params.id);
+        if (route.params.id) {
+          await profilesService.getUserProfile(route.params.id);
+          await keepsService.getUserKeeps(route.params.id);
+          await vaultsService.getUserVaults(route.params.id);
+        }
       } catch (error) {
         logger.error(error)
         Pop.toast(error.message, 'error')
@@ -165,6 +167,9 @@ export default {
   padding: 1px;
   animation-name: fadeInto;
   animation-duration: 5000ms;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 @keyframes fadeInto {
   0% {

@@ -10,7 +10,12 @@
           :title="'Open ' + k.name + ' details'"
         />
         <div
-          class="d-flex justify-content-between mobile-cleanup"
+          class="
+            d-flex
+            justify-content-between
+            mobile-cleanup
+            align-items-center
+          "
           style="height: 0px"
         >
           <h2 class="keep-name">
@@ -62,9 +67,6 @@ export default {
 
       async goToProfile(profileId) {
         try {
-          // await profilesService.getUserProfile(profileId);
-          // await keepsService.getUserKeeps(profileId);
-          // await vaultsService.getUserVaults(profileId);
           router.push({ name: 'Profile', params: { id: profileId } })
         } catch (error) {
           logger.error(error)

@@ -154,6 +154,7 @@ export default {
         try {
           const profileId = AppState.activeKeep.creatorId
           router.push({ name: 'Profile', params: { id: profileId } })
+          Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide()
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
