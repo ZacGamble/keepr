@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: '../proj/wwwroot',
+    outDir: '../keepr/wwwroot',
     sourcemap: false
   },
   server: {
