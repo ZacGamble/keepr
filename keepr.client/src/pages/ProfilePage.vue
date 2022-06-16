@@ -94,7 +94,7 @@ export default {
     const router = useRouter();
     watchEffect(async () => {
       try {
-        if (route.params.id) {
+        if (route.params.id && route.name == "Profile") {
           await profilesService.getUserProfile(route.params.id);
           await keepsService.getUserKeeps(route.params.id);
           await vaultsService.getUserVaults(route.params.id);
