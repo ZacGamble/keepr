@@ -5,6 +5,8 @@
   <main>
     <router-view />
     <KeepModal />
+    <NewKeepModal />
+    <NewVaultModal />
   </main>
 </template>
 

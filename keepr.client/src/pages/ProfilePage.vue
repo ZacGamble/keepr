@@ -1,79 +1,81 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="d-flex">
-        <img :src="profile?.picture" alt="" class="img-clamp me-5 mt-5" />
-        <div class="d-flex flex-column mt-5">
-          <h1>{{ profile?.name }}</h1>
-          <span>Vaults: {{ numberOfVaults }}</span>
-          <span>Keeps: {{ numberOfKeeps }}</span>
+  <div class="container py-4">
+    <div class="row align-items-center mb-4">
+      <div class="col-auto">
+        <img :src="profile?.picture || account?.picture" alt="profile photo" class="rounded-circle shadow img-clamp" />
+      </div>
+      <div class="col">
+        <h1 class="mb-1">{{ profile?.name || account?.name }}</h1>
+        <div class="text-muted fs-5">
+          <span class="me-4"><i class="mdi mdi-lock-outline"></i> <strong>{{ numberOfVaults }}</strong> Vaults</span>
+          <span><i class="mdi mdi-image-multiple-outline"></i> <strong>{{ numberOfKeeps }}</strong> Keeps</span>
         </div>
       </div>
-      <hr class="mt-3" />
     </div>
-    <h3 class="my-3" @click="createVault()">
-      Vaults:
-      <i
-        v-if="route.params.id == account.id"
-        class="fw-bold fs-1 text-primary plus p-1"
-        >+</i
+    <hr class="mb-4" />
+
+    <!-- Vaults Section -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="m-0 fs-3">Vaults</h2>
+      <button
+        v-if="isOwner"
+        class="btn btn-primary shadow-sm"
+        @click="createVault()"
       >
-    </h3>
-    <div class="row">
+        <i class="mdi mdi-plus me-1"></i> Create Vault
+      </button>
+    </div>
+
+    <div class="row mb-5">
       <div
-        class="col-sm-6 col-md-4 col-lg-2 p-2"
+        class="col-sm-6 col-md-4 col-lg-3 p-2"
         v-for="v in vaults"
         :key="v.id"
       >
-        <!-- Vaults -->
         <div
-          class="p-2 mt-2 vault rounded selectable"
+          class="vault-card p-3 rounded-3 shadow-sm selectable text-white d-flex flex-column justify-content-between"
           @click="goToVault(v)"
-          style="background-size: cover"
-          :style="`background-image: url(${v.img})`"
+          :style="`background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${v.img})`"
         >
-          <div class="d-flex justify-content-between">
-            <h5 class="">
-              {{ v.name }} <br /><br />
-              {{ v.description }}
+          <div class="d-flex justify-content-between align-items-start">
+            <h4 class="m-0 text-truncate font-weight-bold" :title="v.name">{{ v.name }}</h4>
+            <i v-if="v.isPrivate" class="mdi mdi-lock text-warning fs-5" title="Private Vault"></i>
+          </div>
+          <p class="m-0 small text-light text-truncate-2">{{ v.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keeps Section -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="m-0 fs-3">Keeps</h2>
+      <button
+        v-if="isOwner"
+        class="btn btn-success shadow-sm"
+        @click="createKeep()"
+      >
+        <i class="mdi mdi-plus me-1"></i> Create Keep
+      </button>
+    </div>
+
+    <div class="masonry-container-profile">
+      <div class="keep-container mb-3" v-for="k in keeps" :key="k.id">
+        <div class="keep-card position-relative overflow-hidden rounded-3 shadow-sm" @click="openKeepModal(k)">
+          <img
+            :src="k.img"
+            alt="keep image"
+            class="img-fluid w-100 keep-img"
+            :title="'Open ' + k.name + ' details'"
+          />
+          <div class="keep-overlay d-flex justify-content-between align-items-end p-3">
+            <h5 class="keep-name text-white m-0 text-truncate" :title="k.name">
+              {{ k.name }}
             </h5>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="wrapper">
-      <h3 class="my-3" @click="createKeep()">
-        Keeps:
-        <i
-          v-if="route.params.id == account.id"
-          class="fw-bold fs-1 text-primary p-1 plus"
-          >+</i
-        >
-      </h3>
-      <div class="masonry-container-profile">
-        <div class="keep-container" v-for="k in keeps" :key="k.id">
-          <!-- Keep Masonry -->
-          <div class="p-2">
-            <img
-              @click="openKeepModal(k)"
-              :src="k.img"
-              alt="keep image"
-              class="img-fluid img-custom"
-              :title="'Open ' + k.name + ' details'"
-            />
-            <div class="d-flex justify-content-between" style="height: 0px">
-              <h5 class="keep-name">
-                {{ k.name }}
-              </h5>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-  <NewKeepModal />
-  <NewVaultModal />
 </template>
 
 
@@ -88,22 +90,26 @@ import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
 import { useRoute, useRouter } from 'vue-router'
 import { Modal } from 'bootstrap'
+
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+
     watchEffect(async () => {
       try {
-        if (route.params.id && route.name == "Profile") {
-          await profilesService.getUserProfile(route.params.id);
-          await keepsService.getUserKeeps(route.params.id);
-          await vaultsService.getUserVaults(route.params.id);
+        const targetId = route.params.id !== 'undefined' && route.params.id ? route.params.id : AppState.account.id;
+        if (targetId && route.name == "Profile") {
+          await profilesService.getUserProfile(targetId);
+          await keepsService.getUserKeeps(targetId);
+          await vaultsService.getUserVaults(targetId);
         }
       } catch (error) {
         logger.error(error)
         Pop.toast(error.message, 'error')
       }
-    })
+    });
+
     return {
       route,
       account: computed(() => AppState.account),
@@ -112,112 +118,111 @@ export default {
       vaults: computed(() => AppState.userVaults),
       numberOfKeeps: computed(() => AppState.keeps.length),
       numberOfVaults: computed(() => AppState.userVaults.length),
+      isOwner: computed(() => {
+        const profileId = route.params.id !== 'undefined' && route.params.id ? route.params.id : AppState.account.id;
+        return AppState.account && profileId === AppState.account.id;
+      }),
 
       async openKeepModal(k) {
         AppState.activeKeep = k;
-        Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
+        Modal.getOrCreateInstance(document.getElementById('keep-modal')).show();
         await keepsService.incrementViews();
       },
 
       async goToVault(v) {
-        const userId = AppState.account.id
+        const userId = AppState.account.id;
         if (v.isPrivate && v.creatorId != userId) {
-          router.push({ name: 'Home' })
-          Pop.toast("Sorry, you weren't invited..")
-          return
+          router.push({ name: 'Home' });
+          Pop.toast("Sorry, this vault is private.");
+          return;
         }
-        AppState.activeVault = v
-        router.push({ name: 'Vault', params: { id: v.id } })
+        AppState.activeVault = v;
+        router.push({ name: 'Vault', params: { id: v.id } });
       },
 
       createVault() {
-        Modal.getOrCreateInstance(document.getElementById("new-vault-modal")).show()
+        Modal.getOrCreateInstance(document.getElementById("new-vault-modal")).show();
       },
 
       createKeep() {
-        Modal.getOrCreateInstance(document.getElementById('new-keep-modal')).show()
+        Modal.getOrCreateInstance(document.getElementById('new-keep-modal')).show();
       }
-    }
+    };
   }
-}
+};
 </script>
 
 
 <style lang="scss" scoped>
 .img-clamp {
-  height: 6em;
-  width: 6em;
+  height: 90px;
+  width: 90px;
+  object-fit: cover;
 }
 
-.plus {
-  text-shadow: 2px 2px 2px black;
+.vault-card {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+.keep-card {
   cursor: pointer;
-}
+  transition: transform 0.2s ease-in-out;
+  background-color: #2b2b2b;
 
-//#region Copied from homepage
-.img-custom {
-  border-radius: 7%;
-  box-shadow: 3px 3px 12px black;
-  cursor: pointer;
-}
-.img-custom:hover {
-  transform: scale(1.02);
-}
-.keep-container {
-  padding: 1px;
-  animation-name: fadeInto;
-  animation-duration: 5000ms;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  break-inside: avoid;
-}
-@keyframes fadeInto {
-  0% {
-    opacity: 0;
-  }
-  40% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 100;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
   }
 }
-.keep-name {
-  transform: translateY(-3em);
-  margin-left: 0.8em;
-  color: whitesmoke;
-  text-shadow: 3px 3px 4px black;
-}
-// #endregion
 
-.vault {
-  color: whitesmoke;
-  text-shadow: 3px 3px 4px black;
-  animation-name: fadeInto;
-  animation-duration: 5000ms;
+.keep-img {
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.keep-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  .keep-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  }
 }
 
 .masonry-container-profile {
-  column-count: 6;
-  column-gap: 0.5em;
+  column-count: 4;
+  column-gap: 1em;
 }
 
-@media only screen and (max-width: 1068px) {
+@media only screen and (max-width: 992px) {
   .masonry-container-profile {
-    column-count: 4;
-    column-gap: 0.5em;
+    column-count: 3;
   }
 }
 
 @media only screen and (max-width: 768px) {
   .masonry-container-profile {
     column-count: 2;
-    column-gap: 0.5em;
   }
 }
 
-@media only screen and (max-width: 425px) {
+@media only screen and (max-width: 480px) {
   .masonry-container-profile {
     column-count: 1;
   }
