@@ -107,7 +107,7 @@ namespace keepr
             string password = "";
             if (!string.IsNullOrEmpty(uri.UserInfo))
             {
-                string[] parts = uri.UserInfo.Split(':');
+                string[] parts = uri.UserInfo.Split(new[] { ':' }, 2);
                 user = System.Uri.UnescapeDataString(parts[0]);
                 if (parts.Length > 1)
                 {
