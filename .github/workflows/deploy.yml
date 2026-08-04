@@ -1,46 +1,51 @@
-# Deploy Dotnet to Heroku.
-name: Deploy to heroku.
+name: Build & Deploy
 
-# Run workflow on every push to master branch
 on:
   push:
-    branches: [deploy]
+    branches: [ main, master, deploy ]
+  pull_request:
+    branches: [ main, master ]
 
-# Your workflows jobs.
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      # Check-out your repository.
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          dotnet-version: 6.0.x
+          node-version: 20
 
-      - name: Set Env Vars
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: 'keepr/appsettings.json'
-        env:
-          CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
-          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-
-      # dotnet build and publish
-      - name: dotnet publish
+      - name: Build Frontend Client
         run: |
-          dotnet publish ./keepr -c Release
-      - name: Build, Push and Release a Docker container to Heroku.
-        uses: gonuit/heroku-docker-deploy@v1.3.3
+          cd keepr.client
+          npm ci || npm install
+          npm run build
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
-          # The email address associated with your Heroku account.
-          email: ${{ secrets.HEROKU_EMAIL }}
-          # Heroku API key associated with provided user's email.
-          # Api Key is available under your Heroku account settings.
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          # Name of the heroku application to which the build is to be sent.
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          dockerfile_directory: ./keepr
+          dotnet-version: 10.0.x
+
+      - name: Build Backend (.NET)
+        run: |
+          dotnet restore keepr/keepr.csproj
+          dotnet build keepr/keepr.csproj -c Release
+
+      - name: Test Docker Container Build
+        run: |
+          docker build -t keepr:latest .
+
+      - name: Trigger Render Deploy Webhook
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/deploy'
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_HOOK" ]; then
+            curl -X POST "$DEPLOY_HOOK"
+          else
+            echo "RENDER_DEPLOY_HOOK_URL secret not set. Skipping deploy webhook trigger."
+          fi

@@ -22,5 +22,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=dotnet-builder /app/publish .
 
+# Cloud providers dynamically populate the PORT environment variable
 ENV PORT=8080
 CMD ["sh", "-c", "ASPNETCORE_URLS=http://*:${PORT} dotnet keepr.dll"]

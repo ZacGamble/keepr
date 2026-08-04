@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: keepr-db
+    environment:
+      MYSQL_ROOT_PASSWORD: secretpassword
+      MYSQL_DATABASE: keepr
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./keepr/dbSetup.sql:/docker-entrypoint-initdb.d/init.sql
+
+  keepr-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: keepr-app
+    ports:
+      - "8080:8080"
+    environment:
+      - CONNECTION_STRING=server=mysql;user=root;database=keepr;port=3306;password=secretpassword;
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN:-dev--ctam859.us.auth0.com}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE:-https://ZacDev.com}
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
