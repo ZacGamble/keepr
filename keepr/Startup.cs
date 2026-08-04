@@ -80,7 +80,50 @@ namespace keepr
         private IDbConnection CreateDbConnection()
         {
             string connectionString = Configuration["CONNECTION_STRING"];
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new System.InvalidOperationException("CONNECTION_STRING is missing or empty. Please set CONNECTION_STRING in appsettings.json or as an environment variable.");
+            }
+
+            connectionString = connectionString.Trim();
+
+            if (connectionString.StartsWith("mysql://", System.StringComparison.OrdinalIgnoreCase) ||
+                connectionString.StartsWith("mysqls://", System.StringComparison.OrdinalIgnoreCase))
+            {
+                connectionString = ConvertMysqlUriToConnectionString(connectionString);
+            }
+
             return new MySqlConnection(connectionString);
+        }
+
+        private static string ConvertMysqlUriToConnectionString(string uriString)
+        {
+            var uri = new System.Uri(uriString);
+            string host = uri.Host;
+            int port = uri.Port > 0 ? uri.Port : 3306;
+            string database = uri.AbsolutePath.TrimStart('/');
+            
+            string user = "";
+            string password = "";
+            if (!string.IsNullOrEmpty(uri.UserInfo))
+            {
+                string[] parts = uri.UserInfo.Split(':');
+                user = System.Uri.UnescapeDataString(parts[0]);
+                if (parts.Length > 1)
+                {
+                    password = System.Uri.UnescapeDataString(parts[1]);
+                }
+            }
+
+            var sb = new System.Text.StringBuilder();
+            sb.Append($"Server={host};Port={port};Database={database};User Id={user};Password={password};");
+            
+            if (host.Contains("tidbcloud.com") || uriString.Contains("ssl"))
+            {
+                sb.Append("SslMode=VerifyFull;");
+            }
+
+            return sb.ToString();
         }
 
 
