@@ -1,0 +1,37 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# .NET Build Artifacts
+**/bin/
+**/obj/
+keepr/bin/
+keepr/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Node / Vite Frontend Build Artifacts
+**/node_modules/
+keepr.client/node_modules/
+keepr.client/dist/
+.npm/
+
+# Generated Frontend Assets in wwwroot
+keepr/wwwroot/assets/
+keepr/wwwroot/index.html
+
+# IDE / Editor Files
+.vs/
+.idea/
+*.swp
+*.swo
+
+# Environment / Secret Overrides
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.local
