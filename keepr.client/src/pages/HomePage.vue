@@ -24,6 +24,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Floating Action Buttons for Logged-In Users -->
+  <div v-if="user.isAuthenticated || (account && account.id)" class="fab-container position-fixed bottom-0 end-0 p-3 mb-3 me-3 d-flex flex-column gap-2">
+    <button
+      class="btn btn-success fab-btn shadow-lg rounded-pill px-3 py-2 d-flex align-items-center gap-2"
+      @click="createKeep"
+      title="Create New Keep"
+    >
+      <i class="mdi mdi-plus fs-4"></i>
+      <span class="fw-bold">New Keep</span>
+    </button>
+    <button
+      class="btn btn-primary fab-btn shadow-lg rounded-pill px-3 py-2 d-flex align-items-center gap-2"
+      @click="createVault"
+      title="Create New Vault"
+    >
+      <i class="mdi mdi-folder-plus fs-4"></i>
+      <span class="fw-bold">New Vault</span>
+    </button>
+  </div>
+
+  <!-- Creation Modals -->
+  <NewKeepModal />
+  <NewVaultModal />
 </template>
 
 
@@ -32,12 +56,18 @@ import { computed, onMounted } from '@vue/runtime-core'
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { keepsService } from '../services/KeepsService.js'
-import { profilesService } from '../services/ProfilesService.js'
-import { vaultsService } from '../services/VaultsService.js'
 import { AppState } from '../AppState';
 import { Modal } from 'bootstrap';
 import { useRouter } from 'vue-router';
+import NewKeepModal from '../components/NewKeepModal.vue';
+import NewVaultModal from '../components/NewVaultModal.vue';
+
 export default {
+  name: 'HomePage',
+  components: {
+    NewKeepModal,
+    NewVaultModal
+  },
   setup() {
     const router = useRouter();
     onMounted(async () => {
@@ -49,6 +79,8 @@ export default {
       }
     })
     return {
+      user: computed(() => AppState.user),
+      account: computed(() => AppState.account),
       keeps: computed(() => AppState.keeps),
 
       async openKeepModal(k) {
@@ -65,6 +97,14 @@ export default {
           logger.error(error)
           Pop.toast(error.message, 'error')
         }
+      },
+
+      createKeep() {
+        Modal.getOrCreateInstance(document.getElementById('new-keep-modal')).show();
+      },
+
+      createVault() {
+        Modal.getOrCreateInstance(document.getElementById('new-vault-modal')).show();
       }
     }
   }
@@ -123,5 +163,19 @@ export default {
 .keep-container {
   break-inside: avoid;
   page-break-inside: avoid;
+}
+
+.fab-container {
+  z-index: 1050;
+}
+.fab-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.95rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
+  }
 }
 </style>
