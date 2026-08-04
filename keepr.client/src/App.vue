@@ -7,6 +7,7 @@
     <KeepModal />
     <NewKeepModal />
     <NewVaultModal />
+    <FloatingActionButtons />
   </main>
 </template>
 
