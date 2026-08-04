@@ -14,7 +14,7 @@
           </h4>
           <img
             v-if="k.creator"
-            @click.stop="goToProfile(k.creator.id)"
+            @click.stop="goToProfile(k.creatorId || k.creator.id)"
             :src="k.creator.picture"
             alt="profile image"
             class="profile-avatar rounded-circle border border-2 border-white shadow-sm"

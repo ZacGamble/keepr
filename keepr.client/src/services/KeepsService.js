@@ -30,8 +30,10 @@ class KeepsService {
     async deleteKeep(){
         const id = AppState.activeKeep.id
         await api.delete("api/keeps/" + id)
-        const index = AppState.keeps.find(k => k.id == id)
-        AppState.keeps.splice(index, 1)
+        const index = AppState.keeps.findIndex(k => k.id == id)
+        if (index !== -1) {
+            AppState.keeps.splice(index, 1)
+        }
     }
 }
 

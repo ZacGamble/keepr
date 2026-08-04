@@ -152,12 +152,13 @@ export default {
 
       async goToProfile() {
         try {
-          const profileId = AppState.activeKeep.creatorId
-          router.push({ name: 'Profile', params: { id: profileId } })
-          Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide()
+          const profileId = AppState.activeKeep.creatorId || AppState.activeKeep.creator?.id;
+          if (!profileId) return;
+          Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide();
+          router.push({ name: 'Profile', params: { id: profileId } });
         } catch (error) {
-          logger.error(error)
-          Pop.toast(error.message, 'error')
+          logger.error(error);
+          Pop.toast(error.message, 'error');
         }
       }
     }
